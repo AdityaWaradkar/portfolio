@@ -6,7 +6,7 @@ export default function Project() {
   return (
     <div
       id="projectsSection"
-      className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center py-12 px-8 font-raleway"
+      className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center py-12 px-8 font-raleway pt-40"
     >
       <div className="max-w-7xl w-full space-y-24">
         {/* First Project */}
@@ -26,10 +26,12 @@ export default function Project() {
               To Do List App
             </h2>
             <p className="text-lg md:text-xl mb-6 leading-relaxed">
-              This is a simple To Do List application that allows users to add,
-              edit, and delete tasks. It utilizes React for frontend
-              development, providing a seamless and dynamic user experience.
-              Features include task prioritization and deadline management.
+              The To-Do List application is a user-friendly tool built with
+              React for the frontend and Go for the backend, providing a dynamic
+              and responsive experience. Users can easily add, edit, and delete
+              tasks, while also prioritizing them and setting deadlines. With
+              its simple yet effective features, the application helps users
+              stay organized and manage tasks efficiently.
             </p>
             <a
               href="https://github.com/AdityaWaradkar/to-do-app-microservice-backend" // Link to your GitHub project
@@ -55,10 +57,13 @@ export default function Project() {
           <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">ParkSense</h2>
             <p className="text-lg md:text-xl mb-6 leading-relaxed">
-              ParkSense is an IoT-based smart parking system that uses sensors
-              and real-time data to find available parking spots. It offers a
-              user-friendly interface and optimizes parking in crowded areas,
-              improving the overall parking experience.
+              ParkSense is an IoT-based smart parking system that integrates
+              hardware and software to optimize parking in congested areas. By
+              utilizing sensors and real-time data, it helps users find
+              available parking spots quickly and efficiently. This project,
+              developed as part of my Semester 5 coursework, provides a
+              user-friendly interface that enhances the overall parking
+              experience.
             </p>
             <a
               href="https://github.com/AdityaWaradkar/IoT_based_smart_parking_system" // Updated GitHub link for second project

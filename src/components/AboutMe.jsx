@@ -4,7 +4,7 @@ export default function AboutMe() {
   return (
     <div
       id="aboutSection"
-      className="min-h-screen bg-gray-700 text-white flex items-center justify-center px-8 font-raleway text-lg md:text-xl pt-[75px] pb-[75px]"
+      className="min-h-screen bg-gray-700 text-white flex items-center justify-center px-8 font-raleway text-lg md:text-xl pt-[125px] pb-[75px]"
     >
       <div className="max-w-7xl w-full flex flex-col gap-12">
         {/* Left Section (2/5) */}
