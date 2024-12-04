@@ -21,7 +21,7 @@ const HeroSection = () => {
           <img
             src={profilePic} // Use imported profile picture
             alt="Profile"
-            className="w-24 h-24 rounded-full object-cover mx-auto"
+            className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover mx-auto"
           />
         </div>
 
