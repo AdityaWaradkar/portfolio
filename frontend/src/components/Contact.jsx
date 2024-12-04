@@ -6,17 +6,44 @@ export default function Contact() {
     email: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic (e.g., API call)
-    alert("Message sent!");
-    setFormData({ name: "", email: "", message: "" });
+
+    // Start submitting
+    setIsSubmitting(true);
+    setSubmissionStatus(""); // Clear previous submission status
+
+    try {
+      const response = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmissionStatus("Your message has been sent successfully!");
+        setFormData({ name: "", email: "", message: "" }); // Clear form
+      } else {
+        setSubmissionStatus(data.error || "Failed to send message.");
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setSubmissionStatus("An error occurred while sending your message.");
+    } finally {
+      setIsSubmitting(false); // Stop submitting
+    }
   };
 
   return (
@@ -39,6 +66,21 @@ export default function Contact() {
           </a>
           .
         </p>
+
+        {/* Submission Status */}
+        {submissionStatus && (
+          <div className="text-center text-lg mb-4">
+            <p
+              className={
+                submissionStatus.includes("success")
+                  ? "text-green-500"
+                  : "text-red-500"
+              }
+            >
+              {submissionStatus}
+            </p>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name Field */}
@@ -99,9 +141,10 @@ export default function Contact() {
           <div className="text-center">
             <button
               type="submit"
+              disabled={isSubmitting}
               className="py-3 px-6 bg-blue-600 text-white rounded-lg text-lg hover:bg-blue-700 transition-all transform hover:scale-105"
             >
-              Send
+              {isSubmitting ? "Sending..." : "Send"}
             </button>
           </div>
         </form>

@@ -35,10 +35,10 @@ const HeroSection = () => {
       <div className="absolute inset-0 flex justify-center items-start z-10 pt-[350px] sm:pt-[350px] md:pt-[350px] sm:flex">
         <div className="max-w-[1000px] w-full h-[130px] text-white flex justify-center items-center p-4">
           <p className="font-raleway text-lg sm:text-xl md:text-2xl font-light tracking-wide text-center word-spacing pt-24">
-            I can build robust backend systems with Go and develop full-stack
-            applications using the MERN stack. Currently interning at The Tata
-            Power Company Limited, I am interested in the DevOps field. Beyond
-            coding, I’m passionate about pencil sketching and photography.
+            I specialize in building robust backend systems with Go and
+            developing full-stack applications using the MERN stack. Currently
+            interning at The Tata Power Company Limited, I am passionate about
+            DevOps. Beyond coding, I enjoy pencil sketching and photography.
           </p>
         </div>
       </div>
