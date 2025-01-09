@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-scroll";
-import profilePic from "../assets/profile_pic.png"; // Import profile picture
+import profilePic from "../assets/Profile_pic.jpg"; // Import profile picture
 
 const Navbar = () => {
   // State to control hamburger menu visibility

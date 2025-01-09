@@ -3,7 +3,7 @@ import backgroundImage from "../assets/backgroundImage.jpg"; // Import the image
 import Icon1 from "../assets/icons/github-icon.svg"; // Import your icon files
 import Icon2 from "../assets/icons/linkedin-icon.svg";
 import Icon3 from "../assets/icons/instagram-icon.svg";
-import profilePic from "../assets/profile_pic.png"; // Import your profile picture
+import profilePic from "../assets/Profile_pic.jpg"; // Import your profile picture
 
 const HeroSection = () => {
   return (
