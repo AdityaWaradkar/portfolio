@@ -14,7 +14,7 @@ const HeroSection = () => {
   useEffect(() => {
     async function fetchVisitorCount() {
       try {
-        const res = await fetch("http://localhost:8080/api/visits");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/visits`);
         if (!res.ok) throw new Error("Failed to fetch visitor count");
         const data = await res.json();
         setVisitorCount(data.visits);
