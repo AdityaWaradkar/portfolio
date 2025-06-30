@@ -69,14 +69,14 @@ const HeroSection = () => {
 
         {/* Desktop View */}
         <div className="hidden sm:flex flex-col items-center mb-48">
-          <h1 className="font-raleway text-[2.5rem] sm:text-[5rem] md:text-8xl lg:text-[8rem] font-thin tracking-[2px] leading-tight">
+          <h1 className="font-raleway text-[2rem] sm:text-[5rem] md:text-[5.8rem] lg:text-[5.8rem] font-thin tracking-[2px] leading-tight">
             Hey, I'm Aditya Waradkar
           </h1>
           <p className="mt-6">
             <span
               className="font-raleway font-thin tracking-wide block"
               style={{
-                fontSize: "25px",
+                fontSize: "20px",
                 lineHeight: "32px",
                 textShadow: "2px 2px 6px rgba(0, 0, 0, 0.6)",
                 wordSpacing: "5px",
