@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import backgroundImage from "../assets/backgroundImage.jpg";
 import backgroundImage_2 from "../assets/backgroundImage_2.png";
-import backgroundImage_3 from "../assets/backgroundImage_3.jpg";
+// ✅ Removed import for backgroundImage_3
 import Icon1 from "../assets/icons/github-icon.svg";
 import Icon2 from "../assets/icons/linkedin-icon.svg";
 import Icon3 from "../assets/icons/instagram-icon.svg";
@@ -32,12 +32,15 @@ const HeroSection = () => {
   return (
     <div
       id="homeSection"
-      className="relative w-full h-[100vh] overflow-hidden text-white text-center px-4 "
+      className="relative w-full h-[100vh] overflow-hidden text-white text-center px-4"
     >
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${backgroundImage_3})` }}
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700"
+        style={{
+          backgroundImage:
+            "url(https://ik.imagekit.io/cs3et6gu9/backgroundImage_3.webp?updatedAt=1751303368144)",
+        }}
       />
 
       {/* Dark Overlay */}
@@ -91,7 +94,7 @@ const HeroSection = () => {
       </div>
 
       {/* Social Icons & Visitor Count */}
-      <div className="absolute bottom-8 z-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-5 sm:gap-6 text-center w-fit">
+      <div className="absolute bottom-8 z-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-5 sm:gap-6 text-center w-fit mb-14">
         <div className="flex justify-center gap-10 sm:gap-24">
           <a
             href="https://github.com/AdityaWaradkar"
@@ -129,7 +132,7 @@ const HeroSection = () => {
         </div>
 
         <span
-          className="font-raleway font-light text-white text-sm sm:text-base tracking-wide italic px-4 sm:px-0 max-w-[90%] sm:max-w-full leading-snug"
+          className="font-raleway font-medium text-white text-sm sm:text-base tracking-wide italic px-4 sm:px-0 max-w-[90%] sm:max-w-full leading-snug"
           style={{ letterSpacing: "1.1px", opacity: 0.95 }}
         >
           {visitorCount !== null ? (
