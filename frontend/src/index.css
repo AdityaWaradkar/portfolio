@@ -4,77 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Shooting star keyframe animation */
-/* Default desktop keyframe animation */
-@keyframes shoot {
-  0% {
-    transform: translate(0, 0) rotate(135deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-100vw, 100vh) rotate(135deg);
-    opacity: 0;
-  }
-}
 
-/* Mobile keyframe animation - shorter distance */
-@keyframes shootMobile {
-  0% {
-    transform: translate(0, 0) rotate(135deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-100vw, 100vh) rotate(135deg);
-    opacity: 0;
-  }
-}
-
-/* Default Shooting Star (Desktop) */
-.shooting-star {
-  position: absolute;
-  height: 2px;
-  width: 150px;
-  background: linear-gradient(
-    to left,
-    rgba(255, 255, 255, 1),
-    rgba(255, 255, 255, 0)
-  );
-  opacity: 0.4;
-  animation-name: shoot;
-  animation-timing-function: ease-out;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.shooting-star::before {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 8px;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  filter: blur(4px);
-  pointer-events: none;
-}
-
-/* Mobile Adjustments */
-@media (max-width: 640px) {
-  .shooting-star {
-    width: 60px; /* Narrower line */
-    animation-name: shootMobile; /* Use mobile animation */
-  }
-
-  .shooting-star::before {
-    width: 3px; /* Smaller glowing tip */
-    height: 3px;
-    filter: blur(1px); /* Softer glow */
-  }
-}
 
 .word-spacing {
   word-spacing: 0.3rem;

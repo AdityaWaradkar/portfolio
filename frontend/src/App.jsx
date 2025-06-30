@@ -9,7 +9,7 @@ const App = () => {
   return (
     <div>
       <Navbar />
-      <main className="mt-[90px]">
+      <main>
         <HeroSection />
         <AboutMe/>
         <Project/>

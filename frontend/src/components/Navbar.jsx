@@ -1,23 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-scroll";
-import profilePic from "../assets/Profile_pic.jpg"; // Import profile picture
+import profilePic from "../assets/Profile_pic.jpg";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const scrollConfig = {
     smooth: true,
     duration: 500,
-    offset: -90, // To account for fixed navbar height
+    offset: -70, // <-- No offset, since navbar overlaps on top
   };
 
   return (
     <>
-      {/* Fixed Navbar */}
-      <div className="fixed top-0 left-0 w-full h-[90px] bg-black flex items-center justify-between px-8 shadow-md z-50 font-light">
-        {/* Left Section: Profile + Name (hidden on mobile) */}
+      <div className="fixed top-0 left-0 w-full h-[70px] bg-black/60 backdrop-blur-sm flex items-center justify-between px-8 shadow-md z-50 font-light">
+        {/* Left Section */}
         <div className="hidden sm:flex items-center space-x-4">
           <div className="w-12 h-12 rounded-full bg-gray-500 overflow-hidden">
             <img
@@ -27,7 +25,7 @@ const Navbar = () => {
             />
           </div>
           <Link
-            to="heroSection"
+            to="homeSection"
             {...scrollConfig}
             className="text-white sm:text-xl text-3xl font-light tracking-wide cursor-pointer"
           >
@@ -35,7 +33,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Hamburger Menu Icon (Mobile Only) */}
+        {/* Hamburger */}
         <div className="sm:hidden flex items-center">
           <button
             onClick={toggleMenu}
@@ -58,10 +56,10 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Name Display */}
+        {/* Mobile Name */}
         <div className="sm:hidden">
           <Link
-            to="heroSection"
+            to="homeSection"
             {...scrollConfig}
             className="text-white text-base sm:text-xl font-light tracking-wide cursor-pointer"
           >
@@ -69,28 +67,23 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Desktop Nav Links */}
+        {/* Desktop Nav */}
         <nav className="hidden sm:flex space-x-14 text-white sm:text-xl tracking-wide">
-          <Link to="heroSection" {...scrollConfig} className="relative group cursor-pointer">
-            home
-            <span className="absolute bottom-[-2px] left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-          <Link to="aboutSection" {...scrollConfig} className="relative group cursor-pointer">
-            about
-            <span className="absolute bottom-[-2px] left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-          <Link to="projectsSection" {...scrollConfig} className="relative group cursor-pointer">
-            projects
-            <span className="absolute bottom-[-2px] left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-          <Link to="contactSection" {...scrollConfig} className="relative group cursor-pointer">
-            contact
-            <span className="absolute bottom-[-2px] left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
-          </Link>
+          {["home", "about", "projects", "contact"].map((label, i) => (
+            <Link
+              key={label}
+              to={`${label}Section`}
+              {...scrollConfig}
+              className="relative group cursor-pointer"
+            >
+              {label}
+              <span className="absolute bottom-[-2px] left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+          ))}
         </nav>
       </div>
 
-      {/* Slide-in Mobile Menu */}
+      {/* Mobile Menu */}
       <div
         className={`fixed top-0 right-0 w-[250px] h-full bg-black text-white p-6 transform ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
@@ -116,18 +109,17 @@ const Navbar = () => {
           </svg>
         </button>
         <div className="flex flex-col space-y-6 mt-10">
-          <Link to="heroSection" {...scrollConfig} onClick={toggleMenu} className="text-base sm:text-xl cursor-pointer">
-            home
-          </Link>
-          <Link to="aboutSection" {...scrollConfig} onClick={toggleMenu} className="text-base sm:text-xl cursor-pointer">
-            about
-          </Link>
-          <Link to="projectsSection" {...scrollConfig} onClick={toggleMenu} className="text-base sm:text-xl cursor-pointer">
-            projects
-          </Link>
-          <Link to="contactSection" {...scrollConfig} onClick={toggleMenu} className="text-base sm:text-xl cursor-pointer">
-            contact
-          </Link>
+          {["home", "about", "projects", "contact"].map((label) => (
+            <Link
+              key={label}
+              to={`${label}Section`}
+              {...scrollConfig}
+              onClick={toggleMenu}
+              className="text-base sm:text-xl cursor-pointer"
+            >
+              {label}
+            </Link>
+          ))}
         </div>
       </div>
     </>

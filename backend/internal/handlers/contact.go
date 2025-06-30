@@ -9,8 +9,7 @@ import (
 	"net/smtp"
 	"os"
 	"time"
-
-	"backend/storage"           // your storage package with Mongo client
+	"backend/storage"           
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -34,7 +33,6 @@ func ContactHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// --- New code: Save contact form data to MongoDB ---
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

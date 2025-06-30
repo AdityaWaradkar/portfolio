@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import backgroundImage from "../assets/backgroundImage.jpg";
+import backgroundImage_2 from "../assets/backgroundImage_2.png";
+import backgroundImage_3 from "../assets/backgroundImage_3.jpg";
 import Icon1 from "../assets/icons/github-icon.svg";
 import Icon2 from "../assets/icons/linkedin-icon.svg";
 import Icon3 from "../assets/icons/instagram-icon.svg";
@@ -23,52 +25,27 @@ const HeroSection = () => {
     }
 
     fetchVisitorCount();
-
-    const interval = setInterval(fetchVisitorCount, 10000); // every 10 seconds
-
+    const interval = setInterval(fetchVisitorCount, 10000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div
-      id="heroSection"
-      className="relative w-full h-[calc(100vh-90px)] overflow-hidden text-white text-center px-4"
+      id="homeSection"
+      className="relative w-full h-[100vh] overflow-hidden text-white text-center px-4 "
     >
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
+        style={{ backgroundImage: `url(${backgroundImage_3})` }}
       />
 
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black opacity-60 backdrop-blur-[3px] z-0" />
-
-      {/* Shooting Stars */}
-      <div className="shooting-stars absolute inset-0 pointer-events-none overflow-visible z-5">
-        {[...Array(40)].map((_, i) => {
-          const left = -25 + i * (250 / 35) + Math.random() * 2;
-          const top = -15 + Math.random() * 15;
-          const duration = (Math.random() * 3 + 5).toFixed(2);
-          const delay = (Math.random() * 6).toFixed(2);
-
-          return (
-            <div
-              key={i}
-              className="shooting-star"
-              style={{
-                top: `${top}%`,
-                left: `${left}%`,
-                animationDuration: `${duration}s`,
-                animationDelay: `${delay}s`,
-              }}
-            />
-          );
-        })}
-      </div>
+      <div className="absolute inset-0 bg-black opacity-65 z-0" />
 
       {/* Main Content */}
       <div
-        className="relative z-10 flex flex-col justify-center items-center h-full pt-[90px]"
+        className="relative z-10 flex flex-col justify-center items-center h-full pt-40"
         style={{ transform: "translateY(-45px)" }}
       >
         {/* Mobile View */}
@@ -115,7 +92,6 @@ const HeroSection = () => {
 
       {/* Social Icons & Visitor Count */}
       <div className="absolute bottom-8 z-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-5 sm:gap-6 text-center w-fit">
-        {/* Social Icons */}
         <div className="flex justify-center gap-10 sm:gap-24">
           <a
             href="https://github.com/AdityaWaradkar"
@@ -125,7 +101,7 @@ const HeroSection = () => {
             <img
               src={Icon1}
               alt="GitHub"
-              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform transform hover:scale-110"
+              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform hover:scale-110"
             />
           </a>
           <a
@@ -136,7 +112,7 @@ const HeroSection = () => {
             <img
               src={Icon2}
               alt="LinkedIn"
-              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform transform hover:scale-110"
+              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform hover:scale-110"
             />
           </a>
           <a
@@ -147,12 +123,11 @@ const HeroSection = () => {
             <img
               src={Icon3}
               alt="Instagram"
-              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform transform hover:scale-110"
+              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform hover:scale-110"
             />
           </a>
         </div>
 
-        {/* Visitor Count */}
         <span
           className="font-raleway font-light text-white text-sm sm:text-base tracking-wide italic px-4 sm:px-0 max-w-[90%] sm:max-w-full leading-snug"
           style={{ letterSpacing: "1.1px", opacity: 0.95 }}

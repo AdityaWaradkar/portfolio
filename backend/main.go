@@ -13,7 +13,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// CORS middleware allowing all origins, methods, and headers
 func enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Allow all origins (*). You can restrict this later.
@@ -33,7 +32,6 @@ func enableCORS(next http.Handler) http.Handler {
 }
 
 func main() {
-	// Load environment variables from .env
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("⚠️ No .env file found or failed to load")
@@ -54,8 +52,6 @@ func main() {
 
 	r.HandleFunc("/api/visits", handlers.VisitHandler).Methods("GET")
 	r.HandleFunc("/api/contact", handlers.ContactHandler).Methods("POST")
-
-	// Wrap router with CORS middleware
 	handler := enableCORS(r)
 
 	port := os.Getenv("PORT")
