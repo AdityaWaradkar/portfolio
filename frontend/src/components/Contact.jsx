@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import emailjs from "emailjs-com"; // Import EmailJS SDK
+import React, { useState, useEffect } from "react";
+import contactBackground from "../assets/contact_page_background.png";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -7,86 +7,87 @@ export default function Contact() {
     email: "",
     message: "",
   });
+
+  const [responseMessage, setResponseMessage] = useState("");
+  const [status, setStatus] = useState(null); // 'success' | 'error' | null
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submissionStatus, setSubmissionStatus] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Start submitting
     setIsSubmitting(true);
-    setSubmissionStatus(""); // Clear previous submission status
+    setResponseMessage("");
+    setStatus(null);
 
     try {
-      // Send email using EmailJS
-      const result = await emailjs.send(
-        "service_gyzsg49", // Replace with your EmailJS service ID
-        "template_n5au6vd", // Replace with your EmailJS template ID
-        {
-          from_name: formData.name,
-          from_email: formData.email, // Use the user's email here
-          message: formData.message,
-        },
-        "ymC0pPWWvgxHfiR1g" // Replace with your EmailJS user ID (not the private key)
-      );
+      const response = await fetch("http://localhost:8080/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-      if (result.status === 200) {
-        setSubmissionStatus("Your message has been sent successfully!");
-        setFormData({ name: "", email: "", message: "" }); // Clear form
+      const data = await response.json();
+
+      if (response.ok) {
+        setResponseMessage(data.message || "Message sent successfully!");
+        setStatus("success");
+        setFormData({ name: "", email: "", message: "" });
       } else {
-        setSubmissionStatus("Failed to send message.");
+        setResponseMessage(data.message || "Failed to send message.");
+        setStatus("error");
       }
     } catch (error) {
-      console.error("Error sending message:", error);
-      setSubmissionStatus("An error occurred while sending your message.");
-    } finally {
-      setIsSubmitting(false); // Stop submitting
+      setResponseMessage("Error sending message. Please try again.");
+      setStatus("error");
+      console.error("Contact form submission error:", error);
     }
+
+    setIsSubmitting(false);
   };
+
+  // Optional: auto clear message after 5 seconds
+  useEffect(() => {
+    if (responseMessage) {
+      const timer = setTimeout(() => {
+        setResponseMessage("");
+        setStatus(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [responseMessage]);
 
   return (
     <div
       id="contactSection"
-      className="min-h-screen bg-gray-800 text-white flex items-center justify-center py-8 px-6 font-raleway"
+      className="relative min-h-screen text-white flex items-center justify-center py-8 px-6 font-raleway overflow-hidden"
     >
-      <div className="w-full max-w-2xl bg-gray-700 p-8 rounded-xl shadow-2xl">
+      {/* Background Image Layer */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `url(${contactBackground})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      ></div>
+
+      {/* Foreground Content */}
+      <div className="relative z-10 w-full max-w-2xl bg-gray-700 p-8 rounded-xl shadow-2xl">
         <h2 className="text-2xl font-bold text-center text-white mb-4">
           Contact Me
         </h2>
         <p className="text-lg text-center mb-6 text-gray-300">
           I'd love to hear from you! Please fill out the form below to get in
-          touch with me. Alternatively, you can email me directly at{" "}
-          <a
-            href="mailto:adityawaradkar1801@gmail.com"
-            className="text-blue-400"
-          >
-            adityawaradkar1801@gmail.com
-          </a>
-          .
+          touch with me.
         </p>
 
-        {/* Submission Status */}
-        {submissionStatus && (
-          <div className="text-center text-lg mb-4">
-            <p
-              className={
-                submissionStatus.includes("success")
-                  ? "text-green-500"
-                  : "text-red-500"
-              }
-            >
-              {submissionStatus}
-            </p>
-          </div>
-        )}
-
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name Field */}
+          {/* ... input fields same as before ... */}
           <div>
             <label htmlFor="name" className="block text-lg text-gray-200 mb-2">
               Your Name
@@ -100,10 +101,10 @@ export default function Contact() {
               required
               className="w-full p-3 rounded-md bg-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               placeholder="Enter your full name"
+              disabled={isSubmitting}
             />
           </div>
 
-          {/* Email Field */}
           <div>
             <label htmlFor="email" className="block text-lg text-gray-200 mb-2">
               Your Email
@@ -117,10 +118,10 @@ export default function Contact() {
               required
               className="w-full p-3 rounded-md bg-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               placeholder="Enter your email address"
+              disabled={isSubmitting}
             />
           </div>
 
-          {/* Message Field */}
           <div>
             <label
               htmlFor="message"
@@ -137,20 +138,34 @@ export default function Contact() {
               rows="4"
               className="w-full p-3 rounded-md bg-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               placeholder="Type your message here"
+              disabled={isSubmitting}
             ></textarea>
           </div>
 
-          {/* Send Button */}
           <div className="text-center">
             <button
               type="submit"
               disabled={isSubmitting}
-              className="py-3 px-6 bg-blue-600 text-white rounded-lg text-lg hover:bg-blue-700 transition-all transform hover:scale-105"
+              className="py-3 px-6 bg-blue-600 text-white rounded-lg text-lg hover:bg-blue-700 transition-all transform hover:scale-105 disabled:opacity-50"
             >
               {isSubmitting ? "Sending..." : "Send"}
             </button>
           </div>
         </form>
+
+        {responseMessage && (
+          <p
+            className={`mt-4 text-center font-semibold transition-opacity duration-300 ${
+              status === "success"
+                ? "text-green-400"
+                : status === "error"
+                ? "text-red-400"
+                : "text-yellow-300"
+            }`}
+          >
+            {responseMessage}
+          </p>
+        )}
       </div>
     </div>
   );

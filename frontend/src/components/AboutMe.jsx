@@ -1,25 +1,29 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 export default function AboutMe() {
+  const backgroundRef = useRef(null);
+
   return (
     <div
+      ref={backgroundRef}
       id="aboutSection"
-      className="min-h-screen bg-gray-700 text-white flex items-center justify-center px-8 font-raleway text-lg md:text-xl pt-[125px] pb-[75px]"
+      className="about-section min-h-screen text-white flex items-center justify-center px-8 font-raleway text-lg md:text-xl pt-[125px] pb-[75px]"
     >
-      <div className="max-w-7xl w-full flex flex-col gap-12">
-        {/* Left Section (2/5) */}
+      <div className="max-w-7xl w-full flex flex-col gap-12 relative z-10">
+        {/* Left Section */}
         <div className="flex-[2] flex flex-col justify-center">
           <h1 className="text-5xl font-bold mb-6">About Me</h1>
           <p className="leading-relaxed word-spacing">
-            I specialize in Go for backend development and the MERN stack.
-            Currently enhancing my skills through an IBM DevOps course, I have a
-            strong foundation in Data Structures and Algorithms (DSA) using
-            Java. Passionate about building scalable web applications, Always
-            eager to learn, I strive to deliver high-quality results.
+            I specialize in backend development using Go and full-stack
+            development with the MERN stack. With a solid foundation in Data
+            Structures and Algorithms (DSA) using Java, I am currently deepening
+            my expertise in DevOps. Passionate about building scalable and
+            efficient web applications, I am continuously learning and committed
+            to delivering clean, high-quality solutions.
           </p>
         </div>
 
-        {/* Right Section (3/5) */}
+        {/* Right Section */}
         <div className="flex-[3] flex flex-col gap-8">
           {/* Skills Section */}
           <div className="space-y-4">
@@ -28,14 +32,24 @@ export default function AboutMe() {
               {[
                 "JavaScript",
                 "GoLang",
-                "React",
+                "React.js",
                 "Java",
                 "Git",
-                "Github",
+                "GitHub",
                 "Shell Scripting",
                 "Linux",
                 "Node.js",
-                "Mongo DB",
+                "MongoDB",
+                "SQL",
+                "Python",
+                "Docker",
+                "Kubernetes",
+                "GitLab CI/CD",
+                "Jenkins",
+                "AWS",
+                "Cloud Computing",
+                "DevOps",
+                "Fullstack Development",
                 "UI / UX",
                 "Tailwind CSS",
               ].map((skill) => (
@@ -43,14 +57,49 @@ export default function AboutMe() {
                   key={skill}
                   className="bg-gray-800 p-4 rounded-md shadow-lg text-white hover:bg-white hover:text-black transition-all duration-300 ease-in-out"
                   style={{
-                    minWidth: "120px", // Ensure the minimum width for each tile
-                    maxWidth: "fit-content", // Adjust width based on content
+                    minWidth: "120px",
+                    maxWidth: "fit-content",
                     flexGrow: 0,
                   }}
                 >
                   {skill}
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Experience Section */}
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold mb-4">Experience</h2>
+            <div className="flex flex-wrap gap-4">
+              <div
+                className="bg-gray-800 p-4 rounded-md shadow-lg text-white hover:bg-white hover:text-black transition-all duration-300 ease-in-out"
+                style={{
+                  minWidth: "280px",
+                  maxWidth: "fit-content",
+                  flexGrow: 0,
+                }}
+              >
+                <div className="font-semibold mb-1 hover:text-black ">
+                  Data Analyst Intern - Tata Power Renewable Energy Limited
+                  <br />
+                  <span className="text-sm ">
+                    Dec 2024 - Mar 2025
+                  </span>
+                </div>
+                <p className="text-sm text-gray-300 mt-2 hover:text-black ">
+                  During this internship, I worked on a project titled: <br />
+                  <em>
+                    “Energy Loss Analysis due to DC Shortfall at Solar Sites.”
+                  </em>{" "}
+                  <br />
+                  The goal was to understand how underperformance in DC capacity
+                  impacts energy generation at solar plants. I developed a
+                  Python-based analysis module to quantify these losses across
+                  multiple sites, which helped in identifying inefficiencies and
+                  improving operational decisions.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -88,7 +137,7 @@ export default function AboutMe() {
                   key={certification.name}
                   className="bg-gray-800 p-4 rounded-md shadow-lg text-white hover:bg-white hover:text-black transition-all duration-300 ease-in-out"
                   style={{
-                    minWidth: "180px", // Ensure the minimum width for each certification tile
+                    minWidth: "180px",
                     maxWidth: "fit-content",
                     flexGrow: 0,
                   }}
@@ -105,38 +154,26 @@ export default function AboutMe() {
             </div>
           </div>
 
-          {/* Hobbies & Interests Section */}
+          {/* Hobbies Section */}
           <div className="space-y-4">
             <h2 className="text-3xl font-bold mb-4">Hobbies & Interests</h2>
             <div className="flex flex-wrap gap-4">
-              {[
-                {
-                  name: "Pencil Sketching",
-                  link: "https://www.instagram.com/adityaa.draws/",
-                },
-                {
-                  name: "Photography",
-                  link: "https://www.instagram.com/adityaa.draws/",
-                },
-              ].map((hobby) => (
-                <div
-                  key={hobby.name}
-                  className="bg-gray-800 p-4 rounded-md shadow-lg text-white hover:bg-white hover:text-black transition-all duration-300 ease-in-out"
-                  style={{
-                    minWidth: "150px", // Ensure the minimum width for each hobby tile
-                    maxWidth: "fit-content",
-                    flexGrow: 0,
-                  }}
+              <div
+                className="bg-gray-800 p-4 rounded-md shadow-lg text-white hover:bg-white hover:text-black transition-all duration-300 ease-in-out"
+                style={{
+                  minWidth: "150px",
+                  maxWidth: "fit-content",
+                  flexGrow: 0,
+                }}
+              >
+                <a
+                  href="https://www.instagram.com/adityaa.draws/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <a
-                    href={hobby.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {hobby.name}
-                  </a>
-                </div>
-              ))}
+                  Pencil Sketching
+                </a>
+              </div>
             </div>
           </div>
         </div>

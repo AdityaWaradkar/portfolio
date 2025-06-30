@@ -1,87 +1,173 @@
-import React from "react";
-import backgroundImage from "../assets/backgroundImage.jpg"; // Import the image
-import Icon1 from "../assets/icons/github-icon.svg"; // Import your icon files
+import React, { useState, useEffect } from "react";
+import backgroundImage from "../assets/backgroundImage.jpg";
+import Icon1 from "../assets/icons/github-icon.svg";
 import Icon2 from "../assets/icons/linkedin-icon.svg";
 import Icon3 from "../assets/icons/instagram-icon.svg";
-import profilePic from "../assets/Profile_pic.jpg"; // Import your profile picture
+import profilePic from "../assets/Profile_pic.jpg";
 
 const HeroSection = () => {
+  const [visitorCount, setVisitorCount] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchVisitorCount() {
+      try {
+        const res = await fetch("http://localhost:8080/api/visits");
+        if (!res.ok) throw new Error("Failed to fetch visitor count");
+        const data = await res.json();
+        setVisitorCount(data.visits);
+        setError(null);
+      } catch (err) {
+        setError("Unable to load visitor count");
+      }
+    }
+
+    fetchVisitorCount();
+
+    const interval = setInterval(fetchVisitorCount, 10000); // every 10 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div id="heroSection" className="relative w-full h-screen">
+    <div
+      id="heroSection"
+      className="relative w-full h-[calc(100vh-90px)] overflow-hidden text-white text-center px-4"
+    >
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${backgroundImage})` }}
-      ></div>
+      />
 
-      {/* Content over the Image */}
-      <div className="absolute inset-0 flex-row justify-center items-start text-center text-white z-10 pt-[150px] sm:pt-[150px]">
-        {/* Profile Picture (Visible only on mobile) */}
-        <div className="sm:hidden mb-4">
-          <img
-            src={profilePic} // Use imported profile picture
-            alt="Profile"
-            className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover mx-auto"
-          />
-        </div>
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black opacity-60 backdrop-blur-[3px] z-0" />
 
-        {/* "Hey, I'm Aditya Waradkar" - Hidden on mobile */}
-        <h1 className="font-raleway text-[2.5rem] sm:text-[5rem] md:text-8xl lg:text-[8rem] font-thin tracking-[2px] hidden sm:block">
-          Hey, I'm Aditya Waradkar
-        </h1>
+      {/* Shooting Stars */}
+      <div className="shooting-stars absolute inset-0 pointer-events-none overflow-visible z-5">
+        {[...Array(40)].map((_, i) => {
+          const left = -25 + i * (250 / 35) + Math.random() * 2;
+          const top = -15 + Math.random() * 15;
+          const duration = (Math.random() * 3 + 5).toFixed(2);
+          const delay = (Math.random() * 6).toFixed(2);
+
+          return (
+            <div
+              key={i}
+              className="shooting-star"
+              style={{
+                top: `${top}%`,
+                left: `${left}%`,
+                animationDuration: `${duration}s`,
+                animationDelay: `${delay}s`,
+              }}
+            />
+          );
+        })}
       </div>
 
-      {/* Paragraph with Raleway font - Hidden on mobile */}
-      <div className="absolute inset-0 flex justify-center items-start z-10 pt-[350px] sm:pt-[350px] md:pt-[350px] sm:flex">
-        <div className="max-w-[1000px] w-full h-[130px] text-white flex justify-center items-center p-4">
-          <p className="font-raleway text-lg sm:text-xl md:text-2xl font-light tracking-wide text-center word-spacing pt-24">
-            I specialize in building robust backend systems with Go and
-            developing full-stack applications using the MERN stack. Currently
-            interning at The Tata Power Company Limited, I am passionate about
-            DevOps. Beyond coding, I enjoy pencil sketching and photography.
+      {/* Main Content */}
+      <div
+        className="relative z-10 flex flex-col justify-center items-center h-full pt-[90px]"
+        style={{ transform: "translateY(-45px)" }}
+      >
+        {/* Mobile View */}
+        <div className="sm:hidden flex flex-col items-center mb-28">
+          <img
+            src={profilePic}
+            alt="Profile"
+            className="w-32 h-32 rounded-full object-cover mb-4"
+          />
+          <h1 className="font-raleway text-2xl font-thin tracking-[1px] leading-snug">
+            Hey, I'm Aditya Waradkar
+          </h1>
+          <p className="mt-3 text-sm leading-relaxed text-gray-200">
+            Full-stack developer skilled in MERN and Go, passionate about DevOps
+            and building scalable systems.
+            <br />
+            Always Learning and Always Sketching
+          </p>
+        </div>
+
+        {/* Desktop View */}
+        <div className="hidden sm:flex flex-col items-center mb-48">
+          <h1 className="font-raleway text-[2.5rem] sm:text-[5rem] md:text-8xl lg:text-[8rem] font-thin tracking-[2px] leading-tight">
+            Hey, I'm Aditya Waradkar
+          </h1>
+          <p className="mt-6">
+            <span
+              className="font-raleway font-thin tracking-wide block"
+              style={{
+                fontSize: "25px",
+                lineHeight: "32px",
+                textShadow: "2px 2px 6px rgba(0, 0, 0, 0.6)",
+                wordSpacing: "5px",
+              }}
+            >
+              Full-stack developer skilled in MERN and Go, passionate about
+              DevOps and building scalable systems.
+              <br />
+              Always learning and always sketching.
+            </span>
           </p>
         </div>
       </div>
 
-      {/* Icons Section */}
-      <div className="absolute z-10 flex justify-center gap-6 sm:gap-14 pt-40 sm:pt-52 top-[calc(350px+130px)] sm:top-[calc(350px+130px)] w-full">
-        <a
-          href="https://github.com/AdityaWaradkar"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            src={Icon1}
-            alt="GitHub"
-            className="w-8 h-8 sm:w-8 sm:h-8 transition-transform transform hover:scale-110"
-          />
-        </a>
-        <a
-          href="https://www.linkedin.com/in/aditya-waradkar-9a03b92a5/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            src={Icon2}
-            alt="LinkedIn"
-            className="w-8 h-8 sm:w-8 sm:h-8 transition-transform transform hover:scale-110"
-          />
-        </a>
-        <a
-          href="https://www.instagram.com/adityaa.draws"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            src={Icon3}
-            alt="Instagram"
-            className="w-8 h-8 sm:w-8 sm:h-8 transition-transform transform hover:scale-110"
-          />
-        </a>
-      </div>
+      {/* Social Icons & Visitor Count */}
+      <div className="absolute bottom-8 z-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-5 sm:gap-6 text-center w-fit">
+        {/* Social Icons */}
+        <div className="flex justify-center gap-10 sm:gap-24">
+          <a
+            href="https://github.com/AdityaWaradkar"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={Icon1}
+              alt="GitHub"
+              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform transform hover:scale-110"
+            />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/aditya-waradkar-9a03b92a5/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={Icon2}
+              alt="LinkedIn"
+              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform transform hover:scale-110"
+            />
+          </a>
+          <a
+            href="https://www.instagram.com/adityaa.draws"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={Icon3}
+              alt="Instagram"
+              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform transform hover:scale-110"
+            />
+          </a>
+        </div>
 
-      {/* Dark Blur Effect Overlay */}
-      <div className="absolute inset-0 bg-black opacity-60 backdrop-blur-[3px] z-0"></div>
+        {/* Visitor Count */}
+        <span
+          className="font-raleway font-light text-white text-sm sm:text-base tracking-wide italic px-4 sm:px-0 max-w-[90%] sm:max-w-full leading-snug"
+          style={{ letterSpacing: "1.1px", opacity: 0.95 }}
+        >
+          {visitorCount !== null ? (
+            <>
+              {visitorCount.toLocaleString()} visitors...
+              <br className="sm:hidden" />
+              &nbsp;and you’re one of them. Thanks for stopping by!
+            </>
+          ) : (
+            "Counting the curious ones..."
+          )}
+        </span>
+      </div>
     </div>
   );
 };
