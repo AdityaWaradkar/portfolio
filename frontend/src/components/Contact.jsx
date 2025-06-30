@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import contactBackground from "../assets/contact_page_background.png";
+const contactBackground = "https://ik.imagekit.io/cs3et6gu9/contact_page_background.webp?updatedAt=1751305043696";
+
 
 export default function Contact() {
   const [formData, setFormData] = useState({

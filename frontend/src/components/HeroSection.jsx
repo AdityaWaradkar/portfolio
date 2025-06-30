@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import backgroundImage from "../assets/backgroundImage.jpg";
-import backgroundImage_2 from "../assets/backgroundImage_2.png";
-// ✅ Removed import for backgroundImage_3
 import Icon1 from "../assets/icons/github-icon.svg";
 import Icon2 from "../assets/icons/linkedin-icon.svg";
 import Icon3 from "../assets/icons/instagram-icon.svg";
-import profilePic from "../assets/Profile_pic.jpg";
+const profilePic = "https://ik.imagekit.io/cs3et6gu9/Profile_pic.webp?updatedAt=1751304842467";
+
 
 const HeroSection = () => {
   const [visitorCount, setVisitorCount] = useState(null);
