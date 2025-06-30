@@ -1,0 +1,63 @@
+# ========== FRONTEND (React, Vite, etc.) ==========
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/.env
+frontend/.env.*          # e.g., .env.local, .env.production
+frontend/.vite/
+frontend/.next/
+frontend/out/
+frontend/.eslintcache
+frontend/coverage/
+frontend/storybook-static/
+
+# ========== BACKEND (Go) ==========
+backend/bin/
+backend/pkg/
+backend/vendor/
+backend/*.exe
+backend/*.test
+backend/*.out
+backend/*.log
+backend/*.tmp
+backend/.cache/
+backend/coverage.out
+
+# If you're using Go workspaces/modules (go.mod, go.sum should NOT be ignored)
+# Do NOT ignore go.mod or go.sum
+
+# ========== GENERAL NODE/NPM ==========
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ========== DOTENV & CONFIG SECRETS ==========
+.env
+.env.*        # Global and service-specific environment files
+
+# ========== LOG FILES ==========
+*.log
+logs/
+*.bak
+*.tmp
+*.swp
+*.old
+
+# ========== IDE & OS ==========
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+
+# ========== DEPLOYMENT PLATFORM FILES (OPTIONAL) ==========
+.vercel/
+.netlify/
+.firebase/
+
+# ========== TEST FILES ==========
+*.test.*
+*.spec.*
