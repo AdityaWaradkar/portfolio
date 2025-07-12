@@ -73,21 +73,21 @@ export default function AboutMe() {
             <h2 className="text-3xl font-bold mb-4">Experience</h2>
             <div className="flex flex-wrap gap-4">
               <div
-                className="bg-gray-800 p-4 rounded-md shadow-lg text-white hover:bg-white hover:text-black transition-all duration-300 ease-in-out"
+                className="group bg-gray-800 p-4 rounded-md shadow-lg text-white hover:bg-white transition-all duration-300 ease-in-out"
                 style={{
                   minWidth: "280px",
                   maxWidth: "fit-content",
                   flexGrow: 0,
                 }}
               >
-                <div className="font-semibold mb-1 hover:text-black ">
+                <div className="font-semibold mb-1 group-hover:text-black">
                   Data Analyst Intern - Tata Power Renewable Energy Limited
                   <br />
-                  <span className="text-sm ">
+                  <span className="text-sm group-hover:text-black">
                     Dec 2024 - Mar 2025
                   </span>
                 </div>
-                <p className="text-sm text-gray-300 mt-2 hover:text-black ">
+                <p className="text-sm text-gray-300 mt-2 group-hover:text-black">
                   During this internship, I worked on a project titled: <br />
                   <em>
                     “Energy Loss Analysis due to DC Shortfall at Solar Sites.”

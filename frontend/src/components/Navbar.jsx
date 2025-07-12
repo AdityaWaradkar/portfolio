@@ -9,8 +9,11 @@ const Navbar = () => {
   const scrollConfig = {
     smooth: true,
     duration: 500,
-    offset: -70, // <-- No offset, since navbar overlaps on top
+    offset: -70,
   };
+
+  // Updated nav links order
+  const navLinks = ["home", "about", "blog", "projects", "contact"];
 
   return (
     <>
@@ -69,7 +72,7 @@ const Navbar = () => {
 
         {/* Desktop Nav */}
         <nav className="hidden sm:flex space-x-14 text-white sm:text-xl tracking-wide">
-          {["home", "about", "projects", "contact"].map((label, i) => (
+          {navLinks.map((label) => (
             <Link
               key={label}
               to={`${label}Section`}
@@ -109,7 +112,7 @@ const Navbar = () => {
           </svg>
         </button>
         <div className="flex flex-col space-y-6 mt-10">
-          {["home", "about", "projects", "contact"].map((label) => (
+          {navLinks.map((label) => (
             <Link
               key={label}
               to={`${label}Section`}
