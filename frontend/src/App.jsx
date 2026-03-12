@@ -1,21 +1,26 @@
+/**
+ * Main App Component
+ * Root component that assembles all sections of the portfolio
+ * Features: Smooth section ordering with navbar for navigation
+ */
 import React from "react";
 import Navbar from "./components/Navbar";
-import HeroSection from "./components/HeroSection"; // Import the HeroSection component
+import HeroSection from "./components/HeroSection";
 import AboutMe from "./components/AboutMe";
+import Blog from "./components/Blog";
 import Project from "./components/Project";
 import Contact from "./components/Contact";
-import Blog from "./components/Blog";
 
 const App = () => {
   return (
-    <div>
+    <div className="App">
       <Navbar />
       <main>
         <HeroSection />
-        <AboutMe/>
-        <Blog/>
-        <Project/>
-        <Contact/>
+        <AboutMe />
+        <Project />
+        <Blog />
+        <Contact />
       </main>
     </div>
   );

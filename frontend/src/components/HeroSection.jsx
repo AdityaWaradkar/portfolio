@@ -1,16 +1,35 @@
-import React, { useState, useEffect } from "react";
+/**
+ * HeroSection Component
+ * Main landing section with profile information and visitor counter
+ * Features: Autonomous dynamic light orbs with floating, pulsing, and color-shifting effects
+ */
+import React, { useState, useEffect, useRef } from "react";
+
+// Asset imports
 import Icon1 from "../assets/icons/github-icon.svg";
 import Icon2 from "../assets/icons/linkedin-icon.svg";
 import Icon3 from "../assets/icons/instagram-icon.svg";
-const profilePic = "https://ik.imagekit.io/cs3et6gu9/Profile_pic.webp?updatedAt=1751304842467";
 
+// Constants
+const PROFILE_PIC =
+  "https://ik.imagekit.io/cs3et6gu9/Profile_pic.webp?updatedAt=1751304842467";
 
 const HeroSection = () => {
+  // State management
   const [visitorCount, setVisitorCount] = useState(null);
   const [error, setError] = useState(null);
 
+  // Refs for dynamic elements
+  const sectionRef = useRef(null);
+  const gridRef = useRef(null);
+  const purpleOrbRef = useRef(null);
+  const blueOrbRef = useRef(null);
+  const centerOrbRef = useRef(null);
+  const timeRef = useRef(0);
+
+  // Fetch visitor count
   useEffect(() => {
-    async function fetchVisitorCount() {
+    const fetchVisitorCount = async () => {
       try {
         const res = await fetch(`${import.meta.env.VITE_API_URL}/api/visits`);
         if (!res.ok) throw new Error("Failed to fetch visitor count");
@@ -19,130 +38,289 @@ const HeroSection = () => {
         setError(null);
       } catch (err) {
         setError("Unable to load visitor count");
+        console.error("Visitor count fetch error:", err);
       }
-    }
+    };
 
     fetchVisitorCount();
     const interval = setInterval(fetchVisitorCount, 10000);
     return () => clearInterval(interval);
   }, []);
 
+  // Autonomous orb animations
+  useEffect(() => {
+    let animationFrame;
+    let startTime = Date.now();
+
+    const animateOrbs = () => {
+      const elapsed = (Date.now() - startTime) / 1000;
+      timeRef.current = elapsed;
+
+      // Purple orb animation
+      if (purpleOrbRef.current) {
+        const floatX = Math.sin(elapsed * 0.5) * 40;
+        const floatY = Math.cos(elapsed * 0.7) * 30;
+        const pulseScale = 1 + Math.sin(elapsed * 2) * 0.1;
+        const hue = Math.sin(elapsed * 0.3) * 10 + 270;
+        const opacity = 0.2 + Math.sin(elapsed * 1.5) * 0.08;
+
+        purpleOrbRef.current.style.transform = `translate(${floatX}px, ${floatY}px) scale(${pulseScale})`;
+        purpleOrbRef.current.style.background = `radial-gradient(circle at 30% 30%, hsla(${hue}, 70%, 50%, ${opacity}), hsla(${hue}, 70%, 30%, 0.05) 70%)`;
+        purpleOrbRef.current.style.filter = `blur(${50 + Math.sin(elapsed) * 10}px)`;
+      }
+
+      // Blue orb animation
+      if (blueOrbRef.current) {
+        const orbitX = Math.sin(elapsed * 0.4) * 60;
+        const orbitY = Math.cos(elapsed * 0.6) * 40;
+        const breathScale = 1 + Math.sin(elapsed * 1.2) * 0.15;
+        const blueHue = Math.sin(elapsed * 0.2) * 15 + 210;
+
+        blueOrbRef.current.style.transform = `translate(${orbitX}px, ${orbitY}px) scale(${breathScale})`;
+        blueOrbRef.current.style.background = `radial-gradient(circle at 70% 70%, hsla(${blueHue}, 75%, 45%, 0.25), hsla(${blueHue}, 75%, 25%, 0.05) 70%)`;
+        blueOrbRef.current.style.filter = `blur(${60 + Math.sin(elapsed * 1.8) * 15}px)`;
+      }
+
+      // Center orb animation
+      if (centerOrbRef.current) {
+        const driftX = Math.sin(elapsed * 0.2) * 20;
+        const driftY = Math.cos(elapsed * 0.3) * 20;
+        const pulseScale = 1 + Math.sin(elapsed * 1.0) * 0.2;
+
+        centerOrbRef.current.style.transform = `translate(-50%, -50%) translate(${driftX}px, ${driftY}px) scale(${pulseScale})`;
+        centerOrbRef.current.style.background = `radial-gradient(circle at ${50 + Math.sin(elapsed) * 20}% ${50 + Math.cos(elapsed) * 20}%, rgba(128, 0, 255, 0.15), rgba(0, 0, 255, 0.05) 70%)`;
+        centerOrbRef.current.style.filter = `blur(${70 + Math.sin(elapsed * 0.7) * 15}px)`;
+      }
+
+      animationFrame = requestAnimationFrame(animateOrbs);
+    };
+
+    animateOrbs();
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
+
+  // Social media links
+  const socialLinks = [
+    { href: "https://github.com/AdityaWaradkar", icon: Icon1, alt: "GitHub" },
+    {
+      href: "https://www.linkedin.com/in/aditya-waradkar-9a03b92a5/",
+      icon: Icon2,
+      alt: "LinkedIn",
+    },
+    {
+      href: "https://www.instagram.com/adityaa.draws",
+      icon: Icon3,
+      alt: "Instagram",
+    },
+  ];
+
+  const iconClass =
+    "w-5 h-5 sm:w-9 sm:h-9 transition-all duration-300 filter brightness-0 invert hover:brightness-100 hover:invert-0";
+
   return (
     <div
       id="homeSection"
-      className="relative w-full h-[100vh] overflow-hidden text-white text-center px-4"
+      ref={sectionRef}
+      className="relative w-full h-[100vh] overflow-hidden text-white text-center px-4 bg-[#0a0a0f]"
     >
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700"
-        style={{
-          backgroundImage:
-            "url(https://ik.imagekit.io/cs3et6gu9/backgroundImage_3.webp?updatedAt=1751303368144)",
-        }}
-      />
+      {/* Grid Background */}
+      <div ref={gridRef} className="absolute inset-0">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a2a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a2a_1px,transparent_1px)] bg-[size:24px_24px] opacity-40"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#2a2a3a_1px,transparent_1px),linear-gradient(to_bottom,#2a2a3a_1px,transparent_1px)] bg-[size:48px_48px] opacity-30"></div>
+      </div>
 
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black opacity-65 z-0" />
+      {/* Orbs */}
+      <div
+        ref={purpleOrbRef}
+        className="absolute top-0 left-0 w-[600px] h-[600px] rounded-full transition-all duration-300 ease-out"
+        style={{
+          transform: "translate(0px, 0px)",
+          willChange: "transform, background, filter",
+          mixBlendMode: "screen",
+        }}
+      ></div>
+      <div
+        ref={blueOrbRef}
+        className="absolute bottom-0 right-0 w-[700px] h-[700px] rounded-full transition-all duration-300 ease-out"
+        style={{
+          transform: "translate(0px, 0px)",
+          willChange: "transform, background, filter",
+          mixBlendMode: "screen",
+        }}
+      ></div>
+      <div
+        ref={centerOrbRef}
+        className="absolute top-1/2 left-1/2 w-[900px] h-[900px] rounded-full transition-all duration-300 ease-out"
+        style={{
+          transform: "translate(-50%, -50%)",
+          willChange: "transform, background, filter",
+          mixBlendMode: "overlay",
+        }}
+      ></div>
+
+      {/* Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(30)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-0.5 h-0.5 bg-white/20 rounded-full animate-float-particle"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animation: `float-particle ${5 + Math.random() * 5}s infinite ease-in-out`,
+              animationDelay: `${Math.random() * 5}s`,
+              opacity: 0.1 + Math.random() * 0.2,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Light Streaks */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(5)].map((_, i) => (
+          <div
+            key={`streak-${i}`}
+            className="absolute w-[200px] h-[2px] bg-gradient-to-r from-transparent via-purple-500/10 to-transparent animate-streak"
+            style={{
+              top: `${20 + i * 15}%`,
+              left: "-10%",
+              transform: `rotate(${i * 10}deg)`,
+              animation: `streak ${8 + i * 2}s infinite linear`,
+              animationDelay: `${i * 2}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Vignette */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#0a0a0f_90%)] opacity-90 pointer-events-none"></div>
 
       {/* Main Content */}
-      <div
-        className="relative z-10 flex flex-col justify-center items-center h-full pt-40"
-        style={{ transform: "translateY(-45px)" }}
-      >
-        {/* Mobile View */}
-        <div className="sm:hidden flex flex-col items-center mb-28">
-          <img
-            src={profilePic}
-            alt="Profile"
-            className="w-32 h-32 rounded-full object-cover mb-4"
-          />
-          <h1 className="font-raleway text-2xl font-thin tracking-[1px] leading-snug">
-            Hey, I'm Aditya Waradkar
-          </h1>
-          <p className="mt-3 text-sm leading-relaxed text-gray-200">
-            Full-stack developer skilled in MERN and Go, passionate about DevOps
-            and building scalable systems.
-            <br />
-            Always Learning and Always Sketching
-          </p>
+      <div className="relative z-10 flex flex-col justify-center items-center h-full">
+        {/* Mobile Profile */}
+        <div className="sm:hidden mb-6">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-full blur-xl opacity-40 animate-pulse"></div>
+            <img
+              src={PROFILE_PIC}
+              alt="Aditya Waradkar profile"
+              className="relative w-36 h-36 rounded-full object-cover ring-4 ring-purple-500/20 ring-offset-4 ring-offset-[#0a0a0f]"
+              loading="lazy"
+            />
+          </div>
         </div>
 
-        {/* Desktop View */}
-        <div className="hidden sm:flex flex-col items-center mb-48">
-          <h1 className="font-raleway text-[2rem] sm:text-[5rem] md:text-[5.8rem] lg:text-[5.8rem] font-thin tracking-[2px] leading-tight">
+        {/* Heading */}
+        <div className="relative mb-4">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-purple-500/10 blur-3xl scale-150"></div>
+          <h1
+            className="relative font-raleway font-bold tracking-tight leading-tight text-5xl sm:text-6xl md:text-8xl lg:text-10xl bg-gradient-to-r from-purple-300 via-white to-blue-300 bg-clip-text text-transparent animate-gradient-x p-5"
+            style={{
+              textShadow:
+                "0 0 30px rgba(128, 0, 255, 0.2), 0 0 60px rgba(0, 0, 255, 0.1)",
+            }}
+          >
             Hey, I'm Aditya Waradkar
           </h1>
-          <p className="mt-6">
+        </div>
+
+        {/* Sub-heading */}
+        <div className="relative mt-4 sm:mt-6 space-y-3 sm:space-y-4 py-5">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-blue-500/5 to-purple-500/5 blur-2xl"></div>
+
+          {/* Tech Stack */}
+          <div className="relative flex flex-wrap justify-center gap-2 sm:gap-3">
+            {["MERN", "Go", "DevOps", "Cloud", "Scalable Systems"].map(
+              (tech) => (
+                <span
+                  key={tech}
+                  className="inline-block px-3 py-1 sm:px-4 sm:py-2 bg-white/5 backdrop-blur-sm rounded-full border border-purple-500/10 hover:border-purple-500/30 text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 hover:text-white transition-all duration-300 hover:scale-105 hover:bg-white/5 shadow-lg shadow-purple-500/5"
+                >
+                  {tech}
+                </span>
+              ),
+            )}
+          </div>
+
+          {/* Separator */}
+          <div className="relative flex items-center justify-center gap-3 py-2">
+            <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
+            <div className="w-1.5 h-1.5 rotate-45 bg-gradient-to-r from-purple-400/70 to-blue-400/70 animate-pulse"></div>
+            <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
+          </div>
+
+          {/* Tagline */}
+          <div className="relative group">
             <span
-              className="font-raleway font-thin tracking-wide block"
-              style={{
-                fontSize: "20px",
-                lineHeight: "32px",
-                textShadow: "2px 2px 6px rgba(0, 0, 0, 0.6)",
-                wordSpacing: "5px",
-              }}
+              className="relative block font-raleway font-light text-base sm:text-lg md:text-xl lg:text-2xl bg-gradient-to-r from-purple-300 via-white to-blue-300 bg-clip-text text-transparent tracking-wide"
+              style={{ textShadow: "0 0 20px rgba(128, 0, 255, 0.15)" }}
             >
-              Full-stack developer skilled in MERN and Go, passionate about
-              DevOps and building scalable systems.
-              <br />
-              Always learning and always sketching.
+              crafting systems that make a difference
             </span>
-          </p>
+          </div>
         </div>
       </div>
 
-      {/* Social Icons & Visitor Count */}
-      <div className="absolute bottom-8 z-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-5 sm:gap-6 text-center w-fit mb-14">
-        <div className="flex justify-center gap-10 sm:gap-24">
-          <a
-            href="https://github.com/AdityaWaradkar"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={Icon1}
-              alt="GitHub"
-              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform hover:scale-110"
-            />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/aditya-waradkar-9a03b92a5/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={Icon2}
-              alt="LinkedIn"
-              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform hover:scale-110"
-            />
-          </a>
-          <a
-            href="https://www.instagram.com/adityaa.draws"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={Icon3}
-              alt="Instagram"
-              className="w-4 h-4 sm:w-8 sm:h-8 transition-transform hover:scale-110"
-            />
-          </a>
+      {/* Social & Visitor Count */}
+      <div className="absolute bottom-8 z-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-6 sm:gap-8 text-center w-fit">
+        <div className="flex justify-center gap-8 sm:gap-16">
+          {socialLinks.map((social, index) => (
+            <a
+              key={social.alt}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visit my ${social.alt} profile`}
+              className="relative group animate-float-icon"
+              style={{ animationDelay: `${index * 0.2}s` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-full blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-white/5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 scale-150"></div>
+              <img
+                src={social.icon}
+                alt={social.alt}
+                className={`${iconClass} relative z-10`}
+                style={{
+                  filter:
+                    "brightness(0) invert(0.8) drop-shadow(0 0 10px rgba(128, 0, 255, 0.2))",
+                }}
+              />
+            </a>
+          ))}
         </div>
 
-        <span
-          className="font-raleway font-medium text-white text-sm sm:text-base tracking-wide italic px-4 sm:px-0 max-w-[90%] sm:max-w-full leading-snug"
-          style={{ letterSpacing: "1.1px", opacity: 0.95 }}
-        >
-          {visitorCount !== null ? (
-            <>
-              {visitorCount.toLocaleString()} visitors...
-              <br className="sm:hidden" />
-              &nbsp;and you’re one of them. Thanks for stopping by!
-            </>
-          ) : (
-            "Counting the curious ones..."
-          )}
-        </span>
+        {/* Visitor Count */}
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="relative backdrop-blur-sm bg-white/5 px-6 py-2 rounded-full border border-white/5 hover:border-purple-500/20 transition-all duration-300">
+            <span
+              className="font-raleway font-medium text-transparent bg-gradient-to-r from-purple-300 via-white to-blue-300 bg-clip-text text-sm sm:text-base tracking-wide italic leading-snug"
+              style={{ letterSpacing: "1.1px" }}
+              aria-live="polite"
+            >
+              {visitorCount !== null ? (
+                <>
+                  <span className="font-bold text-purple-300/80">
+                    {visitorCount.toLocaleString()}
+                  </span>{" "}
+                  visitors...
+                  <br className="sm:hidden" />
+                  <span className="text-white/80">
+                    {" "}
+                    &nbsp;and you're one of them.
+                  </span>
+                  <span className="block sm:inline text-white/60 text-xs sm:text-sm mt-1 sm:mt-0 sm:ml-1">
+                    Thanks for stopping by!
+                  </span>
+                </>
+              ) : error ? (
+                error
+              ) : (
+                "Counting the curious ones..."
+              )}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
