@@ -55,21 +55,27 @@ func ConnectMongo() error {
 }
 
 func createIndexes(ctx context.Context) error {
-	visitorsCollection := Client.Database("portfolio").Collection("visitors")
+    visitorsCollection := Client.Database("portfolio").Collection("visitors")
 
-	// Create unique index on IP field
-	indexModel := mongo.IndexModel{
-		Keys:    bson.M{"ip": 1},
-		Options: options.Index().SetUnique(true).SetName("unique_ip"),
-	}
+    // Try to create unique index, but don't fail if duplicates exist
+    indexModel := mongo.IndexModel{
+        Keys:    bson.M{"ip": 1},
+        Options: options.Index().SetUnique(true).SetName("unique_ip").SetSparse(true),
+    }
 
-	_, err := visitorsCollection.Indexes().CreateOne(ctx, indexModel)
-	if err != nil {
-		return fmt.Errorf("failed to create unique index on visitors: %v", err)
-	}
+    _, err := visitorsCollection.Indexes().CreateOne(ctx, indexModel)
+    if err != nil {
+        // Check if it's a duplicate key error
+        if strings.Contains(err.Error(), "E11000") {
+            log.Println("⚠️ Warning: Duplicate IPs found in visitors collection. Please clean them manually.")
+            log.Println("   The server will continue without the unique index.")
+            return nil // Don't return error, just continue
+        }
+        return fmt.Errorf("failed to create unique index on visitors: %v", err)
+    }
 
-	log.Println("✅ Database indexes created successfully")
-	return nil
+    log.Println("✅ Database indexes created successfully")
+    return nil
 }
 
 func DisconnectMongo() error {
