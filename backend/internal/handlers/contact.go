@@ -1,12 +1,12 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"net/smtp"
 	"os"
 	"strings"
 	"time"
@@ -22,134 +22,129 @@ type ContactForm struct {
 }
 
 func ContactHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("📨 Contact form request received from %s", r.RemoteAddr)
+	log.Printf("📨 Contact request received")
 	w.Header().Set("Content-Type", "application/json")
 
 	var form ContactForm
 	if err := json.NewDecoder(r.Body).Decode(&form); err != nil {
-		log.Printf("❌ Invalid JSON: %v", err)
+		log.Printf("❌ JSON error: %v", err)
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"status":"error","message":"Invalid JSON"}`))
+		json.NewEncoder(w).Encode(map[string]string{"status": "error", "message": "Invalid JSON"})
 		return
 	}
-
-	log.Printf("📝 Form data - Name: %s, Email: %s, Message length: %d", form.Name, form.Email, len(form.Message))
 
 	// Validation
 	if form.Name == "" || form.Email == "" || form.Message == "" {
-		log.Printf("❌ Missing required fields - Name: %q, Email: %q, Message: %q", form.Name, form.Email, form.Message)
+		log.Printf("❌ Missing fields")
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"status":"error","message":"All fields required"}`))
+		json.NewEncoder(w).Encode(map[string]string{"status": "error", "message": "All fields required"})
 		return
 	}
+
 	if !strings.Contains(form.Email, "@") || !strings.Contains(form.Email, ".") {
-		log.Printf("❌ Invalid email format: %s", form.Email)
+		log.Printf("❌ Invalid email: %s", form.Email)
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"status":"error","message":"Invalid email"}`))
+		json.NewEncoder(w).Encode(map[string]string{"status": "error", "message": "Invalid email format"})
 		return
 	}
 
-	// Check email credentials before sending
-	from := os.Getenv("GMAIL_USER")
-	password := os.Getenv("GMAIL_PASS")
-	to := os.Getenv("EMAIL_RECIPIENT")
-
-	log.Printf("🔍 Email config check - GMAIL_USER: %q, EMAIL_RECIPIENT: %q, GMAIL_PASS set: %v", from, to, password != "")
-
-	if from == "" || password == "" || to == "" {
-		log.Printf("❌ Email credentials missing - FROM: %q, TO: %q, PASS set: %v", from, to, password != "")
+	// Send email via SendGrid
+	if err := sendEmailSendGrid(form); err != nil {
+		log.Printf("❌ SendGrid error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{"status":"error","message":"Email service not configured"}`))
+		json.NewEncoder(w).Encode(map[string]string{"status": "error", "message": "Failed to send message"})
 		return
 	}
 
-	// Send email
-	subject := fmt.Sprintf("Portfolio Contact from %s", form.Name)
-	body := fmt.Sprintf("Name: %s\nEmail: %s\n\nMessage:\n%s", form.Name, form.Email, form.Message)
-
-	log.Printf("📧 Attempting to send email from %s to %s", from, to)
-	if err := sendEmail(subject, body); err != nil {
-		log.Printf("❌ Email failed: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{"status":"error","message":"Failed to send email"}`))
-		return
-	}
-	log.Printf("✅ Email sent successfully")
-
-	// Save to DB async (non-blocking)
+	// Save to DB in background
 	go saveContact(form)
-	log.Printf("💾 Contact saved to DB in background")
 
+	log.Printf("✅ Contact processed successfully")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status":"success","message":"Message sent!"}`))
+	json.NewEncoder(w).Encode(map[string]string{"status": "success", "message": "Message sent successfully!"})
+}
+
+func sendEmailSendGrid(form ContactForm) error {
+	apiKey := os.Getenv("SENDGRID_API_KEY")
+	fromEmail := os.Getenv("FROM_EMAIL")
+	toEmail := os.Getenv("TO_EMAIL")
+
+	log.Printf("📧 SendGrid config - From: %s, To: %s, API Key set: %v", fromEmail, toEmail, apiKey != "")
+
+	if apiKey == "" || fromEmail == "" || toEmail == "" {
+		return fmt.Errorf("SendGrid credentials missing")
+	}
+
+	// Prepare email payload
+	emailData := map[string]interface{}{
+		"personalizations": []map[string]interface{}{
+			{
+				"to": []map[string]string{{"email": toEmail}},
+			},
+		},
+		"from": map[string]string{"email": fromEmail},
+		"subject": fmt.Sprintf("Portfolio Contact from %s", form.Name),
+		"content": []map[string]string{
+			{
+				"type":  "text/plain",
+				"value": fmt.Sprintf("Name: %s\nEmail: %s\n\nMessage:\n%s", form.Name, form.Email, form.Message),
+			},
+		},
+	}
+
+	jsonData, err := json.Marshal(emailData)
+	if err != nil {
+		return fmt.Errorf("failed to marshal email data: %v", err)
+	}
+
+	req, err := http.NewRequest("POST", "https://api.sendgrid.com/v3/mail/send", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return fmt.Errorf("failed to create request: %v", err)
+	}
+
+	req.Header.Set("Authorization", "Bearer "+apiKey)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{Timeout: 15 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Printf("❌ SendGrid request failed: %v", err)
+		return fmt.Errorf("network error: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+		log.Printf("✅ SendGrid email sent successfully")
+		return nil
+	}
+
+	// Read error response
+	var errResponse map[string]interface{}
+	json.NewDecoder(resp.Body).Decode(&errResponse)
+	log.Printf("❌ SendGrid error response: %v", errResponse)
+	return fmt.Errorf("SendGrid returned status %d", resp.StatusCode)
 }
 
 func saveContact(form ContactForm) {
-	log.Printf("💾 Starting to save contact to MongoDB")
+	if storage.Client == nil {
+		log.Printf("⚠️ MongoDB client not initialized")
+		return
+	}
+
+	log.Printf("💾 Saving contact to MongoDB")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	collection := storage.Client.Database("portfolio").Collection("contacts")
-	
-	doc := bson.M{
+	_, err := collection.InsertOne(ctx, bson.M{
 		"name":      form.Name,
 		"email":     form.Email,
 		"message":   form.Message,
 		"submitted": time.Now(),
-	}
-	
-	_, err := collection.InsertOne(ctx, doc)
+	})
 	if err != nil {
-		log.Printf("⚠️ Failed to save contact to DB: %v", err)
+		log.Printf("⚠️ Failed to save to DB: %v", err)
 	} else {
-		log.Printf("✅ Contact saved to MongoDB successfully")
-	}
-}
-
-func sendEmail(subject, body string) error {
-	from := os.Getenv("GMAIL_USER")
-	password := os.Getenv("GMAIL_PASS")
-	to := os.Getenv("EMAIL_RECIPIENT")
-
-	smtpHost := "smtp.gmail.com"
-	smtpPort := "587"
-	
-	log.Printf("📧 SMTP Config - Host: %s, Port: %s, From: %s, To: %s", smtpHost, smtpPort, from, to)
-	
-	auth := smtp.PlainAuth("", from, password, smtpHost)
-
-	// Create proper email with headers
-	msg := []byte(fmt.Sprintf("From: %s\r\n"+
-		"To: %s\r\n"+
-		"Subject: %s\r\n"+
-		"MIME-Version: 1.0\r\n"+
-		"Content-Type: text/plain; charset=UTF-8\r\n"+
-		"\r\n"+
-		"%s\r\n", from, to, subject, body))
-
-	log.Printf("📧 Email content length: %d bytes", len(msg))
-
-	// Timeout for SMTP
-	errChan := make(chan error, 1)
-	go func() {
-		log.Printf("📧 Connecting to SMTP server...")
-		err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, []string{to}, msg)
-		if err != nil {
-			log.Printf("📧 SMTP error detail: %v", err)
-		}
-		errChan <- err
-	}()
-
-	select {
-	case err := <-errChan:
-		if err == nil {
-			log.Printf("✅ Email sent successfully to %s", to)
-		} else {
-			log.Printf("❌ SMTP send failed: %v", err)
-		}
-		return err
-	case <-time.After(10 * time.Second):
-		log.Printf("⏰ SMTP timeout after 10 seconds")
-		return fmt.Errorf("SMTP timeout after 10 seconds")
+		log.Printf("✅ Contact saved to MongoDB")
 	}
 }
