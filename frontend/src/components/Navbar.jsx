@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-scroll";
-import profilePic from "../assets/profile_photo.png";
+import profilePic from "../assets/profile_photo.jpg";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -82,7 +82,7 @@ const Navbar = () => {
         </nav>
       </div>
 
-      {/* Mobile Menu - Fixed z-index */}
+      {/* Mobile Menu */}
       <div
         className={`fixed top-0 right-0 w-[260px] h-full bg-black/90 backdrop-blur-xl text-white/80 p-8 transform ${isMenuOpen ? "translate-x-0" : "translate-x-full"} transition-transform duration-400 ease-out z-50 border-l border-white/5 shadow-2xl`}
         aria-hidden={!isMenuOpen}
