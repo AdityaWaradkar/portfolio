@@ -268,7 +268,7 @@ const HeroSection = () => {
 
       {/* Social & Visitor Count - Reduced gap on mobile only */}
       <div
-        className={`absolute z-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-center w-fit ${isMobile ? "bottom-2 gap-2" : "bottom-4 sm:bottom-8 gap-3 sm:gap-6"}`}
+        className={`absolute z-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-center w-fit ${isMobile ? "bottom-2 gap-3 py-20" : "bottom-4 sm:bottom-8 gap-3 sm:gap-6"}`}
       >
         <div
           className={`flex justify-center ${isMobile ? "gap-6" : "gap-6 sm:gap-16"}`}
