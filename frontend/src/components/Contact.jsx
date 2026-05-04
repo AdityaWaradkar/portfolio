@@ -498,7 +498,7 @@ export default function Footer() {
             </span>
             <span className="text-white/20 text-xs">•</span>
             <span className="text-white/20 text-xs bg-gradient-to-r from-purple-500/10 to-blue-500/10 px-3 py-1 rounded-full border border-white/5">
-              MERN Stack
+              React Frontend and Go Backend
             </span>
           </div>
         </div>
