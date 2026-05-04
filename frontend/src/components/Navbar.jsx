@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-scroll";
-import profilePic from "../assets/profile_photo.png";
+
+const profilePic = "https://ik.imagekit.io/cs3et6gu9/profile_photo.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

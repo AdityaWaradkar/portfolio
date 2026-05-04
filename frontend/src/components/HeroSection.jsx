@@ -3,8 +3,7 @@ import Icon1 from "../assets/icons/github-icon.svg";
 import Icon2 from "../assets/icons/linkedin-icon.svg";
 import Icon3 from "../assets/icons/instagram-icon.svg";
 
-const PROFILE_PIC =
-  "https://ik.imagekit.io/cs3et6gu9/Profile_pic.webp?updatedAt=1751304842467";
+const PROFILE_PIC = "https://ik.imagekit.io/cs3et6gu9/profile_photo.png";
 
 const HeroSection = () => {
   const [visitorCount, setVisitorCount] = useState(null);
