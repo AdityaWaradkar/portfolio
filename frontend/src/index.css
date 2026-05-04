@@ -1,152 +1,41 @@
-/* Import Font Awesome Icons */
 @import "@fortawesome/fontawesome-free/css/all.css";
-
-/* Tailwind Imports */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Utilities */
 @layer utilities {
-  .word-spacing {
-    word-spacing: 0.3rem;
-  }
-  
-  .font-extralight {
-    font-weight: 100;
-  }
-
-  /* Scrollbar Hide */
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* Animation Delays */
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
+  .word-spacing { word-spacing: 0.3rem; }
+  .font-extralight { font-weight: 100; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .animation-delay-2000 { animation-delay: 2s; }
 }
 
 /* Particle Animations */
 @keyframes float-particle {
-  0% {
-    transform: translateY(0) translateX(0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.3;
-  }
-  90% {
-    opacity: 0.3;
-  }
-  100% {
-    transform: translateY(-100vh) translateX(100px);
-    opacity: 0;
-  }
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.3; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
 }
 
 @keyframes streak {
-  0% {
-    transform: translateX(-100%) rotate(0deg);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.3;
-  }
-  90% {
-    opacity: 0.3;
-  }
-  100% {
-    transform: translateX(500%) rotate(0deg);
-    opacity: 0;
-  }
+  0% { transform: translateX(-100%) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.3; }
+  90% { opacity: 0.3; }
+  100% { transform: translateX(500%) rotate(0deg); opacity: 0; }
 }
 
-@keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+@keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes pulse-slow { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.5; } }
+@keyframes float-icon { 0% { transform: translateY(0px); } 100% { transform: translateY(-3px); } }
+@keyframes float-slow { 0% { transform: translateY(0px); } 100% { transform: translateY(-5px); } }
+@keyframes gradient-x { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes slideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
 
-@keyframes pulse-slow {
-  0%, 100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@keyframes float-icon {
-  0% {
-    transform: translateY(0px);
-  }
-  100% {
-    transform: translateY(-3px);
-  }
-}
-
-@keyframes float-slow {
-  0% {
-    transform: translateY(0px);
-  }
-  100% {
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes gradient-x {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Animation Classes */
-.animate-float-particle {
-  animation: float-particle linear infinite;
-}
-
-.animate-streak {
-  animation: streak linear infinite;
-}
-
-.animate-spin-slow {
-  animation: spin-slow 10s linear infinite;
-}
-
-.animate-pulse-slow {
-  animation: pulse-slow 4s ease-in-out infinite;
-}
-
-.animate-gradient-x {
-  background-size: 200% 200%;
-  animation: gradient-x 8s ease infinite;
-}
-
-.animate-float-icon {
-  animation: float-icon 2s infinite alternate;
-}
-
-.animate-float-slow {
-  animation: float-slow 3s infinite alternate;
-}
+.animate-float-particle { animation: float-particle linear infinite; }
+.animate-streak { animation: streak linear infinite; }
+.animate-spin-slow { animation: spin-slow 10s linear infinite; }
+.animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+.animate-gradient-x { background-size: 200% 200%; animation: gradient-x 8s ease infinite; }
+.animate-float-icon { animation: float-icon 2s infinite alternate; }
+.animate-float-slow { animation: float-slow 3s infinite alternate; }

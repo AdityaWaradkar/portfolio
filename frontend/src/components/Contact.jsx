@@ -1,8 +1,3 @@
-/**
- * Footer Component
- * Combines contact form with footer elements
- * Features: Form validation, submission state, success/error messages, social links, quick navigation
- */
 import React, { useState, useEffect } from "react";
 import Icon1 from "../assets/icons/github-icon.svg";
 import Icon2 from "../assets/icons/linkedin-icon.svg";
@@ -34,17 +29,14 @@ export default function Footer() {
   const [status, setStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleChange = (e) =>
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setResponseMessage("");
     setStatus(null);
-
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/contact`,
@@ -55,7 +47,6 @@ export default function Footer() {
         },
       );
       const data = await response.json();
-
       if (response.ok) {
         setResponseMessage(data.message || "Message sent successfully!");
         setStatus("success");
@@ -67,7 +58,6 @@ export default function Footer() {
     } catch (error) {
       setResponseMessage("Error sending message. Please try again.");
       setStatus("error");
-      console.error("Contact form submission error:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -96,7 +86,7 @@ export default function Footer() {
       id="contactSection"
       className="relative w-full bg-[#0a0a0f] text-white overflow-hidden border-t border-white/5"
     >
-      {/* Background Layers */}
+      {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a2a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a2a_1px,transparent_1px)] bg-[size:24px_24px] opacity-20" />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#2a2a3a_1px,transparent_1px),linear-gradient(to_bottom,#2a2a3a_1px,transparent_1px)] bg-[size:48px_48px] opacity-10" />
@@ -125,7 +115,7 @@ export default function Footer() {
         ))}
       </div>
 
-      {/* Light Streaks */}
+      {/* Streaks */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(5)].map((_, i) => (
           <div
@@ -142,7 +132,6 @@ export default function Footer() {
         ))}
       </div>
 
-      {/* Vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#0a0a0f_90%)] opacity-70 pointer-events-none" />
 
       {/* Content */}
@@ -165,10 +154,10 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* 3-Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-          {/* Left Column - Brand & Navigation */}
-          <div className="lg:col-span-4 space-y-8">
+        {/* 3-Column Grid - Fixed responsiveness */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
+          {/* Left Column */}
+          <div className="md:col-span-4 space-y-8">
             <div>
               <h3 className="text-3xl sm:text-4xl font-black mb-3 tracking-tight">
                 <span className="bg-gradient-to-r from-purple-300 via-white to-blue-300 bg-clip-text text-transparent">
@@ -205,7 +194,7 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Social Links */}
+            {/* Social */}
             <div>
               <h4 className="text-white/50 text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2">
                 <span className="w-1 h-4 bg-gradient-to-b from-purple-400 to-blue-400 rounded-full" />
@@ -234,12 +223,11 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Middle Column - Contact Form */}
-          <div className="lg:col-span-5">
+          {/* Middle Column - Form */}
+          <div className="md:col-span-5">
             <div className="relative group h-full">
               <div className="absolute -inset-1 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
-
-              <div className="relative h-full bg-white/5 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-white/10 group-hover:border-white/20 transition-all duration-500">
+              <div className="relative h-full bg-white/5 backdrop-blur-xl rounded-3xl p-4 xs:p-6 sm:p-8 border border-white/10 group-hover:border-white/20 transition-all duration-500">
                 <h3 className="text-2xl sm:text-3xl font-bold mb-2">
                   <span className="bg-gradient-to-r from-purple-200 via-white to-blue-200 bg-clip-text text-transparent">
                     Send a Message
@@ -248,7 +236,6 @@ export default function Footer() {
                 <p className="text-white/40 text-sm mb-6">
                   I'll get back to you within 24 hours
                 </p>
-
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label
@@ -269,7 +256,6 @@ export default function Footer() {
                       disabled={isSubmitting}
                     />
                   </div>
-
                   <div>
                     <label
                       htmlFor="email"
@@ -289,7 +275,6 @@ export default function Footer() {
                       disabled={isSubmitting}
                     />
                   </div>
-
                   <div>
                     <label
                       htmlFor="message"
@@ -309,7 +294,6 @@ export default function Footer() {
                       disabled={isSubmitting}
                     />
                   </div>
-
                   <button
                     type="submit"
                     disabled={isSubmitting}
@@ -362,14 +346,9 @@ export default function Footer() {
                       </span>
                     </div>
                   </button>
-
                   {responseMessage && (
                     <div
-                      className={`mt-4 p-3 rounded-xl text-sm text-center ${
-                        status === "success"
-                          ? "bg-green-500/10 text-green-400/90 border border-green-500/20"
-                          : "bg-red-500/10 text-red-400/90 border border-red-500/20"
-                      }`}
+                      className={`mt-4 p-3 rounded-xl text-sm text-center ${status === "success" ? "bg-green-500/10 text-green-400/90 border border-green-500/20" : "bg-red-500/10 text-red-400/90 border border-red-500/20"}`}
                     >
                       {responseMessage}
                     </div>
@@ -379,16 +358,13 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Right Column - Info & Stack */}
-          <div className="lg:col-span-3 space-y-6">
-            {/* Contact Info */}
+          {/* Right Column */}
+          <div className="md:col-span-3 space-y-6">
             <div>
               <h4 className="text-white/50 text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2">
                 <span className="w-1 h-4 bg-gradient-to-b from-purple-400 to-blue-400 rounded-full" />
                 Contact Info
               </h4>
-
-              {/* Email Card */}
               <div className="group relative mb-4">
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md" />
                 <div className="relative bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-white/10 group-hover:border-white/20 transition-all duration-300">
@@ -420,8 +396,6 @@ export default function Footer() {
                   </div>
                 </div>
               </div>
-
-              {/* Location Card */}
               <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md" />
                 <div className="relative bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-white/10 group-hover:border-white/20 transition-all duration-300">

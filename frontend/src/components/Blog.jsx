@@ -1,8 +1,3 @@
-/**
- * Blog Component
- * Displays blog posts in an interactive, visually stunning layout
- * Features: Background hover effects, animated gradients, floating elements
- */
 import React, { useState, useEffect, useRef } from "react";
 
 const blogPosts = [
@@ -69,13 +64,13 @@ export default function Blog() {
       ref={sectionRef}
       className="relative min-h-screen flex items-center justify-center px-4 sm:px-8 font-raleway pt-[100px] sm:pt-[125px] pb-[50px] sm:pb-[75px] overflow-hidden bg-[#0a0a0f]"
     >
-      {/* Background Grid */}
+      {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a2a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a2a_1px,transparent_1px)] bg-[size:24px_24px] opacity-20"></div>
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#2a2a3a_1px,transparent_1px),linear-gradient(to_bottom,#2a2a3a_1px,transparent_1px)] bg-[size:48px_48px] opacity-10"></div>
       </div>
 
-      {/* Parallax Orbs */}
+      {/* Orbs */}
       <div
         className="absolute top-20 left-20 w-[600px] h-[600px] bg-purple-600/5 rounded-full blur-3xl transition-transform duration-700 ease-out"
         style={{
@@ -112,7 +107,7 @@ export default function Blog() {
         ))}
       </div>
 
-      {/* Light Streaks */}
+      {/* Streaks */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(8)].map((_, i) => (
           <div
@@ -129,7 +124,6 @@ export default function Blog() {
         ))}
       </div>
 
-      {/* Vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#0a0a0f_90%)] opacity-80 pointer-events-none"></div>
 
       {/* Content */}
@@ -148,13 +142,11 @@ export default function Blog() {
               </span>
             </h1>
           </div>
-
           <div className="flex items-center justify-center gap-3 mt-6">
             <div className="h-[2px] w-16 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
             <div className="w-3 h-3 rotate-45 bg-gradient-to-r from-purple-400/70 to-pink-400/70 animate-spin-slow" />
             <div className="h-[2px] w-16 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
           </div>
-
           <p className="text-white/40 text-base sm:text-lg max-w-3xl mx-auto mt-8 leading-relaxed">
             Exploring the frontiers of backend development, cloud-native
             architecture, and DevOps through hands-on projects and deep
@@ -162,12 +154,12 @@ export default function Blog() {
           </p>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 auto-rows-fr">
+        {/* Cards Grid - Fixed responsiveness */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 auto-rows-fr">
           {blogPosts.map((blog, index) => (
             <div
               key={index}
-              className={`group relative ${blog.featured ? "lg:col-span-2" : ""}`}
+              className={`group relative ${blog.featured ? "md:col-span-2" : ""}`}
               onMouseEnter={() => setHoveredCard(index)}
               onMouseLeave={() => setHoveredCard(null)}
             >
@@ -175,12 +167,10 @@ export default function Blog() {
                 <div
                   className={`absolute inset-0 bg-gradient-to-r ${blog.gradient} rounded-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-xl`}
                 />
-
                 <div className="relative bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 group-hover:border-white/20 transition-all duration-500">
                   <div
                     className={`h-1 w-full bg-gradient-to-r ${blog.gradient} opacity-70`}
                   />
-
                   <div className="p-8 lg:p-10">
                     <div className="flex items-start justify-between mb-6">
                       <span className="px-3 py-1 text-xs font-semibold bg-white/5 backdrop-blur-sm rounded-full border border-white/10 text-white/60">
@@ -203,7 +193,6 @@ export default function Blog() {
                         <span>{blog.date}</span>
                       </div>
                     </div>
-
                     <h2 className="text-3xl lg:text-4xl font-black mb-2 tracking-tight">
                       <span
                         className={`bg-gradient-to-r ${blog.gradient} bg-clip-text text-transparent`}
@@ -211,14 +200,12 @@ export default function Blog() {
                         {blog.title}
                       </span>
                     </h2>
-
                     <h3 className="text-white/40 text-lg lg:text-xl mb-4 font-light">
                       {blog.subtitle}
                     </h3>
                     <p className="text-white/40 text-base lg:text-lg mb-6 leading-relaxed">
                       {blog.description}
                     </p>
-
                     <div className="flex items-center justify-between mb-8">
                       <div className="flex items-center gap-2 text-white/30 text-sm">
                         <svg
@@ -236,7 +223,6 @@ export default function Blog() {
                         </svg>
                         <span>{blog.readTime}</span>
                       </div>
-
                       <div className="flex gap-2">
                         {blog.category === "Cloud-Native" && (
                           <>
@@ -260,7 +246,6 @@ export default function Blog() {
                         )}
                       </div>
                     </div>
-
                     {blog.link !== "#" ? (
                       <a
                         href={blog.link}
@@ -316,7 +301,7 @@ export default function Blog() {
           ))}
         </div>
 
-        {/* View All Button */}
+        {/* View All */}
         <div className="flex justify-center mt-16">
           <button className="group relative px-8 py-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 overflow-hidden">
             <span className="relative z-10 text-white/50 group-hover:text-white/70 text-lg font-semibold flex items-center gap-3">

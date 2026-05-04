@@ -1,8 +1,3 @@
-/**
- * Main App Component
- * Root component that assembles all sections of the portfolio
- * Features: Smooth section ordering with navbar for navigation
- */
 import React from "react";
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";

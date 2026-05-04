@@ -1,27 +1,15 @@
-/**
- * HeroSection Component
- * Main landing section with profile information and visitor counter
- * Features: Autonomous dynamic light orbs with floating, pulsing, and color-shifting effects
- */
 import React, { useState, useEffect, useRef } from "react";
-
-// Asset imports
 import Icon1 from "../assets/icons/github-icon.svg";
 import Icon2 from "../assets/icons/linkedin-icon.svg";
 import Icon3 from "../assets/icons/instagram-icon.svg";
 
-// Constants
 const PROFILE_PIC =
   "https://ik.imagekit.io/cs3et6gu9/Profile_pic.webp?updatedAt=1751304842467";
 
 const HeroSection = () => {
-  // State management
   const [visitorCount, setVisitorCount] = useState(null);
   const [error, setError] = useState(null);
-
-  // Refs for dynamic elements
   const sectionRef = useRef(null);
-  const gridRef = useRef(null);
   const purpleOrbRef = useRef(null);
   const blueOrbRef = useRef(null);
   const centerOrbRef = useRef(null);
@@ -38,68 +26,53 @@ const HeroSection = () => {
         setError(null);
       } catch (err) {
         setError("Unable to load visitor count");
-        console.error("Visitor count fetch error:", err);
       }
     };
-
     fetchVisitorCount();
     const interval = setInterval(fetchVisitorCount, 10000);
     return () => clearInterval(interval);
   }, []);
 
-  // Autonomous orb animations
+  // Orb animations
   useEffect(() => {
     let animationFrame;
     let startTime = Date.now();
-
     const animateOrbs = () => {
       const elapsed = (Date.now() - startTime) / 1000;
       timeRef.current = elapsed;
-
-      // Purple orb animation
       if (purpleOrbRef.current) {
         const floatX = Math.sin(elapsed * 0.5) * 40;
         const floatY = Math.cos(elapsed * 0.7) * 30;
         const pulseScale = 1 + Math.sin(elapsed * 2) * 0.1;
         const hue = Math.sin(elapsed * 0.3) * 10 + 270;
         const opacity = 0.2 + Math.sin(elapsed * 1.5) * 0.08;
-
         purpleOrbRef.current.style.transform = `translate(${floatX}px, ${floatY}px) scale(${pulseScale})`;
         purpleOrbRef.current.style.background = `radial-gradient(circle at 30% 30%, hsla(${hue}, 70%, 50%, ${opacity}), hsla(${hue}, 70%, 30%, 0.05) 70%)`;
         purpleOrbRef.current.style.filter = `blur(${50 + Math.sin(elapsed) * 10}px)`;
       }
-
-      // Blue orb animation
       if (blueOrbRef.current) {
         const orbitX = Math.sin(elapsed * 0.4) * 60;
         const orbitY = Math.cos(elapsed * 0.6) * 40;
         const breathScale = 1 + Math.sin(elapsed * 1.2) * 0.15;
         const blueHue = Math.sin(elapsed * 0.2) * 15 + 210;
-
         blueOrbRef.current.style.transform = `translate(${orbitX}px, ${orbitY}px) scale(${breathScale})`;
         blueOrbRef.current.style.background = `radial-gradient(circle at 70% 70%, hsla(${blueHue}, 75%, 45%, 0.25), hsla(${blueHue}, 75%, 25%, 0.05) 70%)`;
         blueOrbRef.current.style.filter = `blur(${60 + Math.sin(elapsed * 1.8) * 15}px)`;
       }
-
-      // Center orb animation
       if (centerOrbRef.current) {
         const driftX = Math.sin(elapsed * 0.2) * 20;
         const driftY = Math.cos(elapsed * 0.3) * 20;
         const pulseScale = 1 + Math.sin(elapsed * 1.0) * 0.2;
-
         centerOrbRef.current.style.transform = `translate(-50%, -50%) translate(${driftX}px, ${driftY}px) scale(${pulseScale})`;
         centerOrbRef.current.style.background = `radial-gradient(circle at ${50 + Math.sin(elapsed) * 20}% ${50 + Math.cos(elapsed) * 20}%, rgba(128, 0, 255, 0.15), rgba(0, 0, 255, 0.05) 70%)`;
         centerOrbRef.current.style.filter = `blur(${70 + Math.sin(elapsed * 0.7) * 15}px)`;
       }
-
       animationFrame = requestAnimationFrame(animateOrbs);
     };
-
     animateOrbs();
     return () => cancelAnimationFrame(animationFrame);
   }, []);
 
-  // Social media links
   const socialLinks = [
     { href: "https://github.com/AdityaWaradkar", icon: Icon1, alt: "GitHub" },
     {
@@ -123,8 +96,8 @@ const HeroSection = () => {
       ref={sectionRef}
       className="relative w-full h-[100vh] overflow-hidden text-white text-center px-4 bg-[#0a0a0f]"
     >
-      {/* Grid Background */}
-      <div ref={gridRef} className="absolute inset-0">
+      {/* Grid */}
+      <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a2a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a2a_1px,transparent_1px)] bg-[size:24px_24px] opacity-40"></div>
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#2a2a3a_1px,transparent_1px),linear-gradient(to_bottom,#2a2a3a_1px,transparent_1px)] bg-[size:48px_48px] opacity-30"></div>
       </div>
@@ -175,7 +148,7 @@ const HeroSection = () => {
         ))}
       </div>
 
-      {/* Light Streaks */}
+      {/* Streaks */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(5)].map((_, i) => (
           <div
@@ -192,7 +165,6 @@ const HeroSection = () => {
         ))}
       </div>
 
-      {/* Vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#0a0a0f_90%)] opacity-90 pointer-events-none"></div>
 
       {/* Main Content */}
@@ -210,11 +182,11 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Heading */}
+        {/* Heading - Fixed responsive text */}
         <div className="relative mb-4">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-purple-500/10 blur-3xl scale-150"></div>
           <h1
-            className="relative font-raleway font-bold tracking-tight leading-tight text-5xl sm:text-6xl md:text-8xl lg:text-10xl bg-gradient-to-r from-purple-300 via-white to-blue-300 bg-clip-text text-transparent animate-gradient-x p-5"
+            className="relative font-raleway font-bold tracking-tight leading-tight text-4xl xs:text-5xl sm:text-6xl md:text-8xl lg:text-10xl bg-gradient-to-r from-purple-300 via-white to-blue-300 bg-clip-text text-transparent animate-gradient-x p-5 break-words"
             style={{
               textShadow:
                 "0 0 30px rgba(128, 0, 255, 0.2), 0 0 60px rgba(0, 0, 255, 0.1)",
@@ -226,30 +198,11 @@ const HeroSection = () => {
 
         {/* Sub-heading */}
         <div className="relative mt-4 sm:mt-6 space-y-3 sm:space-y-4 py-5">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-blue-500/5 to-purple-500/5 blur-2xl"></div>
-
-          {/* Tech Stack */}
-          <div className="relative flex flex-wrap justify-center gap-2 sm:gap-3">
-            {["MERN", "Go", "DevOps", "Cloud", "Scalable Systems"].map(
-              (tech) => (
-                <span
-                  key={tech}
-                  className="inline-block px-3 py-1 sm:px-4 sm:py-2 bg-white/5 backdrop-blur-sm rounded-full border border-purple-500/10 hover:border-purple-500/30 text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 hover:text-white transition-all duration-300 hover:scale-105 hover:bg-white/5 shadow-lg shadow-purple-500/5"
-                >
-                  {tech}
-                </span>
-              ),
-            )}
-          </div>
-
-          {/* Separator */}
           <div className="relative flex items-center justify-center gap-3 py-2">
             <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
             <div className="w-1.5 h-1.5 rotate-45 bg-gradient-to-r from-purple-400/70 to-blue-400/70 animate-pulse"></div>
             <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
           </div>
-
-          {/* Tagline */}
           <div className="relative group">
             <span
               className="relative block font-raleway font-light text-base sm:text-lg md:text-xl lg:text-2xl bg-gradient-to-r from-purple-300 via-white to-blue-300 bg-clip-text text-transparent tracking-wide"

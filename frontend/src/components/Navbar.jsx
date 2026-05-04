@@ -1,8 +1,3 @@
-/**
- * Navbar Component
- * Responsive navigation bar with mobile hamburger menu
- * Features: Smooth scroll to sections, active state indication, mobile menu toggle
- */
 import React, { useState } from "react";
 import { Link } from "react-scroll";
 import profilePic from "../assets/Profile_pic.jpg";
@@ -18,7 +13,6 @@ const Navbar = () => {
     <>
       {/* Desktop Navbar */}
       <div className="fixed top-0 left-0 w-full h-[70px] bg-black/40 backdrop-blur-md flex items-center justify-between px-8 shadow-sm z-50 font-light border-b border-white/5">
-        {/* Left Section - Desktop */}
         <div className="hidden sm:flex items-center space-x-3">
           <div className="w-10 h-10 rounded-full bg-gray-800/80 overflow-hidden ring-1 ring-white/10">
             <img
@@ -37,7 +31,6 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Mobile Name */}
         <div className="sm:hidden">
           <Link
             to="homeSection"
@@ -48,7 +41,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Hamburger Button */}
+        {/* Hamburger */}
         <div className="sm:hidden flex items-center">
           <button
             onClick={toggleMenu}
@@ -73,7 +66,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Nav */}
         <nav className="hidden sm:flex space-x-12 text-white/50 text-base tracking-wide">
           {navLinks.map((label) => (
             <Link
@@ -89,11 +82,9 @@ const Navbar = () => {
         </nav>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Fixed z-index */}
       <div
-        className={`fixed top-0 right-0 w-[260px] h-full bg-black/90 backdrop-blur-xl text-white/80 p-8 transform ${
-          isMenuOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-400 ease-out z-40 border-l border-white/5 shadow-2xl`}
+        className={`fixed top-0 right-0 w-[260px] h-full bg-black/90 backdrop-blur-xl text-white/80 p-8 transform ${isMenuOpen ? "translate-x-0" : "translate-x-full"} transition-transform duration-400 ease-out z-50 border-l border-white/5 shadow-2xl`}
         aria-hidden={!isMenuOpen}
       >
         <button
@@ -115,7 +106,6 @@ const Navbar = () => {
             />
           </svg>
         </button>
-
         <div className="flex flex-col space-y-6 mt-16">
           {navLinks.map((label, index) => (
             <Link
@@ -135,7 +125,6 @@ const Navbar = () => {
             </Link>
           ))}
         </div>
-
         <div className="absolute bottom-16 left-8 right-8 h-[0.5px] bg-white/5" />
         <div className="absolute bottom-8 left-8 text-white/20 text-xs font-light tracking-wider">
           © 2025

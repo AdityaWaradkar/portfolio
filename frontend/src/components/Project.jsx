@@ -1,8 +1,3 @@
-/**
- * Project Component
- * Displays project portfolio in an interactive carousel
- * Features: Smooth horizontal scrolling, project cards with hover effects, navigation controls
- */
 import React, { useRef, useState, useEffect } from "react";
 
 const projects = [
@@ -13,7 +8,7 @@ const projects = [
     description:
       "Cloud-native food donation platform connecting restaurants with NGOs to reduce food waste.",
     longDescription:
-      "Gratia is a cloud-native platform using Go microservices and React, powered by Docker, Kubernetes (EKS), and Terraform. NGOs can browse food listings from restaurants, filter by location, and claim surplus food through real-time messaging. Features include user authentication, donation tracking, impact analytics, and automated notifications.",
+      "Gratia is a cloud-native platform using Go microservices and React, powered by Docker, Kubernetes (EKS), and Terraform. NGOs can browse food listings from restaurants, filter by location, and claim surplus food through real-time messaging.",
     githubLink: "https://github.com/AdityaWaradkar/Gratia",
     tech: [
       "Go",
@@ -34,13 +29,36 @@ const projects = [
     ],
   },
   {
+    id: "safe",
+    name: "SAFE",
+    status: "completed",
+    description:
+      "Real-time IoT-based adaptive fire evacuation system using risk-aware dynamic routing algorithm.",
+    longDescription:
+      "Designed and implemented the entire software system: Risk-aware path routing, edge computing on Raspberry Pi, live dashboard for real-time hazard visualization, and LED actuation logic. Published at IEEE INDIN 2026.",
+    githubLink: "https://github.com/AdityaWaradkar/SAFE",
+    tech: [
+      "Python",
+      "Risk-aware path routing Algorithm",
+      "Edge Computing",
+      "Live Dashboard",
+      "Raspberry Pi",
+    ],
+    color: "from-red-500 to-orange-500",
+    highlights: [
+      "IEEE Publication",
+      "Live Dashboard",
+      "Full Software Ownership",
+    ],
+  },
+  {
     id: "parksense",
     name: "ParkSense",
     status: "completed",
     description:
       "IoT-based smart parking system accepted at ICT4SD 2025 international conference.",
     longDescription:
-      "ParkSense uses ultrasonic sensors and Arduino to detect vehicle presence in real-time, with a Node.js backend and React frontend. Users can view available spots, reserve spaces, and receive navigation guidance. Features include parking duration tracking, automated billing, and occupancy analytics.",
+      "ParkSense uses ultrasonic sensors and Arduino to detect vehicle presence in real-time, with a Node.js backend and React frontend. Users can view available spots, reserve spaces, and receive navigation guidance.",
     githubLink:
       "https://github.com/AdityaWaradkar/IoT_based_smart_parking_system",
     tech: [
@@ -68,7 +86,7 @@ const projects = [
     description:
       "Full-stack task management app with React frontend and Go backend.",
     longDescription:
-      "A task management tool with React frontend and Go backend using MongoDB. Features include task creation, editing, completion tracking, and deletion. Advanced capabilities include task prioritization, deadline setting with date picker, task categorization with tags, and search/filter functionality.",
+      "A task management tool with React frontend and Go backend using MongoDB. Features include task creation, editing, completion tracking, and deletion with prioritization and deadline setting.",
     githubLink:
       "https://github.com/AdityaWaradkar/to-do-app-microservice-backend",
     tech: [
@@ -115,9 +133,8 @@ export default function Project() {
         newIndex !== activeIndex &&
         newIndex >= 0 &&
         newIndex < projects.length
-      ) {
+      )
         setActiveIndex(newIndex);
-      }
     }
   };
 
@@ -166,7 +183,6 @@ export default function Project() {
         ))}
       </div>
 
-      {/* Vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#0a0a0f_80%)] opacity-60 pointer-events-none"></div>
 
       {/* Content */}
@@ -187,7 +203,6 @@ export default function Project() {
 
         {/* Carousel */}
         <div className="relative group">
-          {/* Nav Buttons */}
           <button
             onClick={prevProject}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 z-20 w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/20 hover:border-white/20 transition-all duration-300 flex items-center justify-center text-white/70 hover:text-white shadow-xl"
@@ -206,7 +221,6 @@ export default function Project() {
               />
             </svg>
           </button>
-
           <button
             onClick={nextProject}
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 z-20 w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/20 hover:border-white/20 transition-all duration-300 flex items-center justify-center text-white/70 hover:text-white shadow-xl"
@@ -226,13 +240,13 @@ export default function Project() {
             </svg>
           </button>
 
-          {/* Track */}
+          {/* Track - Added w-full */}
           <div
             ref={carouselRef}
             onScroll={handleScroll}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
-            className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide scroll-smooth py-4"
+            className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide scroll-smooth py-4 w-full"
           >
             {projects.map((project) => (
               <div
@@ -245,11 +259,7 @@ export default function Project() {
                       className={`h-1 w-20 rounded-full bg-gradient-to-r ${project.color}`}
                     />
                     <span
-                      className={`px-4 py-1.5 rounded-full text-sm font-semibold backdrop-blur-md border ${
-                        project.status === "completed"
-                          ? "bg-green-500/10 text-green-300 border-green-500/30"
-                          : "bg-yellow-500/10 text-yellow-300 border-yellow-500/30"
-                      }`}
+                      className={`px-4 py-1.5 rounded-full text-sm font-semibold backdrop-blur-md border ${project.status === "completed" ? "bg-green-500/10 text-green-300 border-green-500/30" : "bg-yellow-500/10 text-yellow-300 border-yellow-500/30"}`}
                     >
                       {project.status === "completed"
                         ? "Completed"
@@ -257,7 +267,8 @@ export default function Project() {
                     </span>
                   </div>
 
-                  <h2 className="text-5xl lg:text-6xl font-black mb-6 tracking-tight">
+                  {/* Fixed responsive title size */}
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-6 tracking-tight">
                     <span
                       className={`bg-gradient-to-r ${project.color} bg-clip-text text-transparent`}
                     >
@@ -340,11 +351,7 @@ export default function Project() {
               <button
                 key={index}
                 onClick={() => scrollToProject(index)}
-                className={`group relative h-2 rounded-full transition-all duration-300 ${
-                  index === activeIndex
-                    ? "w-12 bg-gradient-to-r from-purple-400 to-blue-400"
-                    : "w-2 bg-white/20 hover:bg-white/40"
-                }`}
+                className={`group relative h-2 rounded-full transition-all duration-300 ${index === activeIndex ? "w-12 bg-gradient-to-r from-purple-400 to-blue-400" : "w-2 bg-white/20 hover:bg-white/40"}`}
               >
                 {index === activeIndex && (
                   <span className="absolute inset-0 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full animate-pulse" />
