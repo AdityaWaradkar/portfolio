@@ -61,3 +61,5 @@ Thumbs.db
 # ========== TEST FILES ==========
 *.test.*
 *.spec.*
+backend/.env
+.env
