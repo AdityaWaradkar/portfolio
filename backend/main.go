@@ -18,20 +18,27 @@ func enableCORS(next http.Handler) http.Handler {
 		allowedOrigins := os.Getenv("ALLOWED_ORIGIN")
 		origin := r.Header.Get("Origin")
 
+		// Always set CORS headers for allowed origins
 		if allowedOrigins != "" {
 			for _, o := range strings.Split(allowedOrigins, ",") {
-				if strings.TrimSpace(o) == origin || strings.TrimSpace(o) == "*" {
+				o = strings.TrimSpace(o)
+				if o == origin || o == "*" {
 					w.Header().Set("Access-Control-Allow-Origin", origin)
 					break
 				}
 			}
-		} else {
+		}
+
+		// If no match but allowed origins is empty, allow all
+		if w.Header().Get("Access-Control-Allow-Origin") == "" && allowedOrigins == "" {
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 		}
 
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
 
+		// Handle preflight
 		if r.Method == "OPTIONS" {
 			w.WriteHeader(http.StatusOK)
 			return
@@ -66,5 +73,6 @@ func main() {
 	}
 
 	log.Printf("🚀 Server running on port %s", port)
+	log.Printf("📝 Allowed origins: %s", os.Getenv("ALLOWED_ORIGIN"))
 	log.Fatal(http.ListenAndServe(":"+port, enableCORS(r)))
 }
